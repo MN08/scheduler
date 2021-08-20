@@ -34,30 +34,82 @@
                     </div>
 
                     <div class="panel-body">
-                        <table id="General-DataTables" data-resources="" class="table table-striped table-bordered table-hover" style="width: 100%;">
+                       <div class="col-md-12">
+                            <div class="row">
+                                <ul class="pull-right">
+                                    <form method="get" action="{{ route('dashboard.users') }}">
+                                        <div class="input-group">
+                                          <input type="text" class="form-control" placeholder="Search" name="search" value="{{ $request['search'] ?? '' }}" />
+                                          <div class="input-group-btn">
+                                            <button class="btn btn-primary" type="submit">
+                                              <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                          </div>
+                                        </div>
+                                    </form>
+                                </ul>
+                            </div>
+                       </div>
 
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>E-Mail</th>
-                                <th>Registered</th>
-                            </tr>
+                        <table id="General-DataTables" data-resources="" class="table table-striped table-bordered table-hover" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama</th>
+                                    <th>E-Mail</th>
+                                    <th>Terdaftar</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
                             @foreach ($users as $user)
                             <tr>
-                                <td>1</td>
+                                <th scope="row">{{ ($users->currentPage()-1) *$users->perPage() + $loop->iteration  }}</th>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at }}</td>
+                                <td>
+                                    <a href="{{ route('dashboard.users.edit',['id' => $user->id]) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $user->id }}">
+                                        <b class="fa fa-trash"></b> Hapus
+                                    </button>
+                                    <div class="modal fade" id="modal-delete-{{ $user->id }}">
+                                        <div class="modal-dialog ">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-primary-rapo">
+                                                    <button class="close text-white" data-dismiss="modal"><span class="fa fa-times"></span></button>
+                                                    <h4 class="modal-title text-white">Hapus User</h4>
+                                                  </div>
+                                            </div>
+                                            <div class="modal-body" style="background-color: white;">
+                                                <p>Apakah anda yakin ingin menghapus User <strong>{{ $user->name }}</strong> ?</p>
+                                            </div>
+                                            <div class="modal-footer" style="background-color: white;">
+                                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
+                                                <form action="{{route('dashboard.users.delete',['id' => $user->id])  }}" method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
 
                         </table>
-                        {{ $users->links() }}
+                        <div class="pull-right">
+                            {{$users->appends($request)->links('pagination::bootstrap-4')}}
                     </div>
 
                     <div class="panel-footer">
                     </div>
                 </div>
             </div>
+
+
 
 @endsection

@@ -13,7 +13,7 @@
                             <img class="user-avatar" alt="" src="{{ asset('assets/images/default.png') }}" height="34" />
                             <span class="user-name">
                                 <span class="hidden-xs">
-                                    {{ Auth::user()->fullname }} <i class="fa fa-angle-down"></i>
+                                     <i class="fa fa-angle-down"></i>
                                 </span>
                             </span>
                         </a>

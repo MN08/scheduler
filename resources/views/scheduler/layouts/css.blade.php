@@ -13,3 +13,5 @@
 
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
 
+    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" type="text/css" />
+

@@ -7,7 +7,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ Route('dashboard.users') }}">
                             <i class="main-icon et-profile-male"></i> <span>User</span>
                         </a>
                     </li>
