@@ -2,7 +2,7 @@
             <nav id="sideNav">
                 <ul class="nav nav-list">
                     <li>
-                        <a class="dashboard" href="">
+                        <a class="dashboard" href="{{ Route('dashboard') }}">
                             <i class="main-icon et-linegraph"></i> <span>Dashboard</span>
                         </a>
                     </li>
@@ -12,28 +12,33 @@
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ Route('dashboard.rooms') }}">
                             <i class="main-icon et-profile-male"></i> <span>Kelas</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ Route('dashboard.teachers') }}">
                             <i class="main-icon fa fa-graduation-cap"></i> <span>Guru</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ Route('dashboard.subjects') }}">
+                            <i class="main-icon et-profile-male"></i> <span>Mata Pelajaran</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ Route('dashboard.times') }}">
                             <i class="main-icon et-profile-male"></i> <span>Jam Pelajaran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="{{ Route('dashboard.schoolyears') }}">
                             <i class="main-icon et-profile-male"></i> <span>Tahun Ajaran</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
-                            <i class="main-icon et-profile-male"></i> <span>Mata Pelajaran</span>
+                        {{-- <a href="{{ Route('dashboard.schedules') }}"> --}}
+                            <i class="main-icon et-profile-male"></i> <span>Jadwal</span>
                         </a>
                     </li>
                 </ul>
