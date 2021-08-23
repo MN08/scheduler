@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Teacher;
 use Illuminate\Database\Seeder;
-use App\Models\User;
 
-class CreateUsersSeeder extends Seeder
+class CreateTeacherSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,8 @@ class CreateUsersSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()
-            ->count(3)
+        Teacher::factory()
+            ->count(55)
             ->create();
     }
 }

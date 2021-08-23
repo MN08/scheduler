@@ -21,7 +21,7 @@ class CreateTeacherSubjectsTable extends Migration
             $table
                 ->unsignedBigInteger('subject_id');
             $table
-                ->unsignedBigInteger('time_id');
+                ->unsignedBigInteger('room_id');
             $table
                 ->timestamps();
             $table
@@ -42,9 +42,9 @@ class CreateTeacherSubjectsTable extends Migration
                 ->onDelete('cascade');
 
             $table
-                ->foreign('time_id')
+                ->foreign('room_id')
                 ->references('id')
-                ->on('times')
+                ->on('rooms')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

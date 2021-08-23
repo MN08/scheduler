@@ -14,14 +14,8 @@ class SchoolYearController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, schoolyear $schoolyears)
+    public function index(Request $request, SchoolYear $schoolyears)
     {
-        // $search = $request->input('search');
-
-        // $schoolyears = $schoolyears->when($search, function ($query) use ($search) {
-        //     return $query->where('name', 'like', '%' . $search . '%')
-        //         ->orWhere('grade', 'like', '%' . $search . '%');
-        // })
         $schoolyears = $schoolyears->paginate(15);
 
         $request = $request->all();
@@ -39,7 +33,10 @@ class SchoolYearController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.schoolyear.form');
+        return view('scheduler.admin.schoolyear.form', [
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.schoolyears.store'
+        ]);
     }
 
     /**
@@ -48,7 +45,7 @@ class SchoolYearController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, SchoolYear $schoolYear)
+    public function store(Request $request, SchoolYear $schoolyear)
     {
         $validator = VALIDATOR::make($request->all(), [
             'year' => 'required',
@@ -60,9 +57,9 @@ class SchoolYearController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $schoolYear->year = $request->input('year');
-            $schoolYear->semester = $request->input('semester');
-            $schoolYear->save();
+            $schoolyear->year = $request->input('year');
+            $schoolyear->semester = $request->input('semester');
+            $schoolyear->save();
 
             return redirect()->route('dashboard.schoolyears');
         }
@@ -85,12 +82,13 @@ class SchoolYearController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(SchoolYear $schoolyear)
     {
-
-        $schoolyear = schoolyear::find($id);
-
-        return view('scheduler.admin.schoolyear.form', ['schoolyear' => $schoolyear]);
+        return view('scheduler.admin.schoolyear.form', [
+            'schoolyear'   => $schoolyear,
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.schoolyears.update'
+        ]);
     }
 
     /**
@@ -100,17 +98,15 @@ class SchoolYearController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, SchoolYear $schoolyear)
     {
-
-        $schoolyear = schoolyear::find($id);
         $validator = VALIDATOR::make($request->all(), [
             'year' => 'required',
             'semester' => 'required'
         ]);
 
         if ($validator->fails()) {
-            return redirect('dashboard/schoolyears/edit/' . $id)
+            return redirect()->route('dashboard.schoolyears.edit' . $schoolyear->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
@@ -118,7 +114,7 @@ class SchoolYearController extends Controller
             $schoolyear->semester = $request->input('semester');
             $schoolyear->save();
 
-            return redirect('dashboard/schoolyears');
+            return redirect()->route('dashboard.schoolyears');
         }
     }
 
@@ -128,11 +124,10 @@ class SchoolYearController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SchoolYear $schoolyear)
     {
-        $schoolyear = schoolyear::find($id);
         $schoolyear->delete();
 
-        return redirect('dashboard/schoolyears');
+        return redirect()->route('dashboard.schoolyears');
     }
 }

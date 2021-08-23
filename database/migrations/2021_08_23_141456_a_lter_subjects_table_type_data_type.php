@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableClassNametoRoom extends Migration
+class ALterSubjectsTableTypeDataType extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class AlterTableClassNametoRoom extends Migration
      */
     public function up()
     {
-        Schema::table('classes', function (Blueprint $table) {
-            //
+        Schema::table('subjects', function (Blueprint $table) {
+            $table->string('type', 10)->change();
         });
-
-        Schema::rename('classes', 'rooms');
     }
 
     /**
@@ -27,6 +25,6 @@ class AlterTableClassNametoRoom extends Migration
      */
     public function down()
     {
-        Schema::rename('rooms', 'classes');
+        //
     }
 }

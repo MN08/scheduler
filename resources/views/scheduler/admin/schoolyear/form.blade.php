@@ -25,12 +25,12 @@
             </div>
 
             <div class="panel-body">
-                {{-- @include('scheduler.partials.alert') --}}
 
-                <form action="{{ route('dashboard.schoolyears.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$schoolyear->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    {{-- @method('put')
-                    {{ $method_field ?? '' }} --}}
+                    @if (isset($schoolyear))
+                        @method('put')
+                    @endif
 
                     <fieldset>
 
@@ -38,7 +38,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Tahun Ajaran</label>
-                                    <input type="text" class="form-control" name="year" value="{{old('year')?? $schoolyear->year }}">
+                                    <input type="text" class="form-control" name="year" value="{{ old('year') ?? $schoolyear->year ?? '' }}">
                                     @error('year')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -50,8 +50,13 @@
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Semester</label>
-                                    <input type="text" class="form-control" name="semester" value="{{old('semester')?? $schoolyear->semester }}">
+                                    <label for="type">Pilih Semester :</label><br>
+                                    <div class="form-group">
+                                        <select class="form-control" id="semester" name="semester">
+                                            <option value="Ganjil" {{ $schoolyear->semester == 'Ganjil' ? 'selected' : '' }}>Ganjil</option>
+                                            <option value="Genap" {{ $schoolyear->semester == 'Genap' ? 'selected' : '' }}>Genap</option>
+                                        </select>
+                                    </div>
                                     @error('semester')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -66,7 +71,7 @@
                     <div class="row">
                         <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                             <button type="submit" class="btn btn-3d btn-teal margin-top-30 pull-right">
-                                Simpan
+                                {{ $button }}
                             </button>
                         </div>
                     </div>

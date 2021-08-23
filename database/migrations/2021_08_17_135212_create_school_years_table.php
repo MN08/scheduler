@@ -16,16 +16,12 @@ class CreateSchoolYearsTable extends Migration
         Schema::create('school_years', function (Blueprint $table) {
             $table
                 ->bigIncrements('id');
-
             $table
                 ->string('year', 9);
-
             $table
-                ->tinyInteger('semester');
-
+                ->enum('semester', ['Ganjil', 'Genap']);
             $table
                 ->timestamps();
-
             $table
                 ->softDeletes();
         });

@@ -40,7 +40,10 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.subject.form');
+        return view('scheduler.admin.subject.form', [
+            'button'        => 'Simpan',
+            'url'           => 'dashboard.subjects.store'
+        ]);
     }
 
     /**
@@ -55,6 +58,7 @@ class SubjectController extends Controller
             'name' => 'required',
             'code' => 'required',
             'grade' => 'required',
+            'type' => 'required',
             'available_time' => 'required'
         ]);
 
@@ -66,6 +70,7 @@ class SubjectController extends Controller
             $subject->name = $request->input('name');
             $subject->code = $request->input('code');
             $subject->grade = $request->input('grade');
+            $subject->type = $request->input('type');
             $subject->available_time = $request->input('available_time');
             $subject->save();
 
@@ -90,12 +95,13 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Subject $subject)
     {
-
-        $subject = subject::find($id);
-
-        return view('scheduler.admin.subject.form', ['subject' => $subject]);
+        return view('scheduler.admin.subject.form', [
+            'subject' => $subject,
+            'button'        => 'Simpan',
+            'url'           => 'dashboard.subjects.update'
+        ]);
     }
 
     /**
@@ -113,6 +119,7 @@ class SubjectController extends Controller
             'name' => 'required',
             'code' => 'required',
             'grade' => 'required',
+            'type' => 'required',
             'available_time' => 'required',
         ]);
 
@@ -124,6 +131,7 @@ class SubjectController extends Controller
             $subject->name = $request->input('name');
             $subject->code = $request->input('code');
             $subject->grade = $request->input('grade');
+            $subject->type = $request->input('type');
             $subject->available_time = $request->input('available_time');
             $subject->save();
 
@@ -137,11 +145,10 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Subject $subject)
     {
-        $subject = subject::find($id);
         $subject->delete();
 
-        return redirect('dashboard/subjects');
+        return redirect()->route('dashboard.subjects');
     }
 }

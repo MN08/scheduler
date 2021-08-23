@@ -23,6 +23,8 @@ class CreateSubjectsTable extends Migration
             $table
                 ->tinyInteger('grade');
             $table
+                ->enum('type', ['Teori', 'Praktikum']);
+            $table
                 ->tinyInteger('available_time');
             $table
                 ->timestamps();

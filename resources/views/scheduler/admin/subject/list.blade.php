@@ -58,6 +58,7 @@
                                     <th>Nama</th>
                                     <th>Kode Mapel</th>
                                     <th>Kelas</th>
+                                    <th>Tipe Kelas</th>
                                     <th>Jumlah Jam</th>
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
@@ -69,9 +70,10 @@
                                 <td>{{ $subject->name }}</td>
                                 <td>{{ $subject->code }}</td>
                                 <td>{{ $subject->grade }}</td>
+                                <td>{{ $subject->type }}</td>
                                 <td>{{ $subject->available_time }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.subjects.edit',['id' => $subject->id]) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.subjects.edit',$subject->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $subject->id }}">
@@ -86,11 +88,11 @@
                                                   </div>
                                             </div>
                                             <div class="modal-body" style="background-color: white;">
-                                                <p>Apakah anda yakin ingin menghapus class <strong>{{ $subject->name }}</strong> ?</p>
+                                                <p>Apakah anda yakin ingin menghapus Mata Pelajaran <strong>{{ $subject->name }}</strong> ?</p>
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.subjects.delete',['id' => $subject->id])  }}" method="POST">
+                                                <form action="{{route('dashboard.subjects.delete',$subject->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>

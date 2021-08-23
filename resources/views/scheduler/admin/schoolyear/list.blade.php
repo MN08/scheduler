@@ -34,22 +34,6 @@
                     </div>
 
                     <div class="panel-body">
-                       {{-- <div class="col-md-12">
-                            <div class="row">
-                                <ul class="pull-right">
-                                    <form method="get" action="{{ route('dashboard.schoolyears') }}">
-                                        <div class="input-group">
-                                          <input type="text" class="form-control" placeholder="Search" name="search" value="{{ $request['search'] ?? '' }}" />
-                                          <div class="input-group-btn">
-                                            <button class="btn btn-primary" type="submit">
-                                              <span class="glyphicon glyphicon-search"></span>
-                                            </button>
-                                          </div>
-                                        </div>
-                                    </form>
-                                </ul>
-                            </div>
-                       </div> --}}
 
                         <table id="General-DataTables" data-resources="" class="table table-striped table-bordered table-hover" style="width: 100%;">
                             <thead>
@@ -67,7 +51,7 @@
                                 <td>{{ $schoolyear->year }}</td>
                                 <td>{{ $schoolyear->semester }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.schoolyears.edit',['id' => $schoolyear->id]) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.schoolyears.edit',$schoolyear->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $schoolyear->id }}">
@@ -86,7 +70,7 @@
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.schoolyears.delete',['id' => $schoolyear->id])  }}" method="POST">
+                                                <form action="{{route('dashboard.schoolyears.delete',$schoolyear->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>

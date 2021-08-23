@@ -42,6 +42,11 @@ class UserController extends Controller
      */
     public function create()
     {
+
+        return view('scheduler.admin.user.form', [
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.users.store'
+        ]);
     }
 
     /**
@@ -50,9 +55,24 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        //
+        $validator = VALIDATOR::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|unique:App\Models\User,email,' . $user->id
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('dashboard.users.create')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->save();
+
+            return redirect()->route('dashboard.teachers');
+        }
     }
 
     /**
@@ -72,12 +92,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
 
-        $user = USER::find($id);
+        // $user = USER::find($id);
 
-        return view('scheduler.admin.user.form', ['user' => $user]);
+        return view('scheduler.admin.user.form', [
+            'user' => $user,
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.users.update'
+        ]);
     }
 
     /**
@@ -87,17 +111,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-
-        $user = USER::find($id);
         $validator = VALIDATOR::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|unique:App\Models\User,email,' . $id
+            'email' => 'required|unique:App\Models\User,email,' . $user->id
         ]);
 
         if ($validator->fails()) {
-            return redirect('dashboard/users/edit/' . $id)
+            return redirect()->route('dashboard.users.edit', $user->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
@@ -105,7 +127,7 @@ class UserController extends Controller
             $user->email = $request->input('email');
             $user->save();
 
-            return redirect('dashboard/users');
+            return redirect()->route('dashboard.users');
         }
     }
 
@@ -115,11 +137,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = USER::find($id);
         $user->delete();
 
-        return redirect('dashboard/users');
+        return redirect()->route('dashboard.users.delete');
     }
 }

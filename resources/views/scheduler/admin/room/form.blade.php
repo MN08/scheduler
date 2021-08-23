@@ -27,18 +27,18 @@
             <div class="panel-body">
                 {{-- @include('scheduler.partials.alert') --}}
 
-                <form action="{{ route('dashboard.rooms.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$room->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    {{-- @method('put') --}}
-                    {{-- {{ $method_field ?? '' }} --}}
+                    @if (isset($room))
+                        @method('put')
+                    @endif
 
                     <fieldset>
-
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Kelas</label>
-                                    <input type="number" class="form-control" name="grade" value="{{old('grade')?? $room->grade }}">
+                                    <input type="number" class="form-control" name="grade" value="{{old('grade')?? $room->grade ?? '' }}">
                                     @error('grade')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -52,7 +52,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Kode Kelas</label>
-                                    <input type="text" class="form-control" name="code" value="{{old('code')?? $room->code }}">
+                                    <input type="text" class="form-control" name="code" value="{{old('code')?? $room->code ?? ''}}">
                                     @error('code')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -66,7 +66,7 @@
                     <div class="row">
                         <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                             <button type="submit" class="btn btn-3d btn-teal margin-top-30 pull-right">
-                                Simpan
+                                {{ $button }}
                             </button>
                         </div>
                     </div>

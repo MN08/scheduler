@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftdeleteTableUser extends Migration
+class CreateRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,15 @@ class AddSoftdeleteTableUser extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
+            $table
+                ->bigIncrements('id');
+            $table
+                ->string('code', 15);
+            $table
+                ->tinyInteger('grade');
+            $table
+                ->timestamps();
             $table
                 ->softDeletes();
         });
@@ -26,8 +34,6 @@ class AddSoftdeleteTableUser extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('deleted_at');
-        });
+        Schema::dropIfExists('rooms');
     }
 }

@@ -21,7 +21,7 @@ class TeacherController extends Controller
         $teachers = $teachers->when($search, function ($query) use ($search) {
             return $query->where('name', 'like', '%' . $search . '%');
         })
-            ->paginate(8);
+            ->paginate(15);
 
         $request = $request->all();
 
@@ -38,7 +38,10 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.teacher.form');
+        return view('scheduler.admin.teacher.form', [
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.teachers.store'
+        ]);
     }
 
     /**
@@ -82,12 +85,13 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Teacher $teacher)
     {
-
-        $teacher = teacher::find($id);
-
-        return view('scheduler.admin.teacher.form', ['teacher' => $teacher]);
+        return view('scheduler.admin.teacher.form', [
+            'teacher'   => $teacher,
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.teachers.update'
+        ]);
     }
 
     /**
@@ -97,23 +101,21 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Teacher $teacher)
     {
-
-        $teacher = teacher::find($id);
         $validator = VALIDATOR::make($request->all(), [
             'name' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect('dashboard/teachers/edit/' . $id)
+            return redirect()->route('dashboard.teachers.edit', $teacher->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
             $teacher->name = $request->input('name');
             $teacher->save();
 
-            return redirect('dashboard/teachers');
+            return redirect()->route('dashboard.teachers');
         }
     }
 
@@ -123,11 +125,10 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Teacher $teacher)
     {
-        $teacher = teacher::find($id);
         $teacher->delete();
 
-        return redirect('dashboard/teachers');
+        return redirect()->route('dashboard.teachers');
     }
 }

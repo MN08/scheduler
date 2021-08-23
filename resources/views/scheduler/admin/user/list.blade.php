@@ -20,7 +20,7 @@
                         <ul class="options pull-right list-inline">
 
                             <li>
-                                <a href="" class="btn btn-primary btn-xs btn-block">
+                                <a href="{{ route('dashboard.users.create') }}" class="btn btn-primary btn-xs btn-block">
                                     <i class="fa fa-plus"></i>TAMBAH
                                 </a>
                             </li>
@@ -69,7 +69,7 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->created_at }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.users.edit',['id' => $user->id]) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.users.edit', $user->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $user->id }}">
@@ -88,7 +88,7 @@
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.users.delete',['id' => $user->id])  }}" method="POST">
+                                                <form action="{{route('dashboard.users.delete',$user->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>

@@ -16,12 +16,6 @@ class TimeController extends Controller
      */
     public function index(Request $request, time $times)
     {
-        // $search = $request->input('search');
-
-        // $times = $times->when($search, function ($query) use ($search) {
-        //     return $query->where('name', 'like', '%' . $search . '%')
-        //         ->orWhere('grade', 'like', '%' . $search . '%');
-        // })
         $times = $times->paginate(15);
 
         $request = $request->all();
@@ -39,7 +33,10 @@ class TimeController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.time.form');
+        return view('scheduler.admin.time.form', [
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.times.store'
+        ]);
     }
 
     /**
@@ -85,12 +82,13 @@ class TimeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Time $time)
     {
-
-        $time = time::find($id);
-
-        return view('scheduler.admin.time.form', ['time' => $time]);
+        return view('scheduler.admin.time.form', [
+            'time'      => $time,
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.times.update'
+        ]);
     }
 
     /**
@@ -100,17 +98,15 @@ class TimeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Time $time)
     {
-
-        $time = time::find($id);
         $validator = VALIDATOR::make($request->all(), [
             'start_time' => 'required',
             'end_time' => 'required'
         ]);
 
         if ($validator->fails()) {
-            return redirect('dashboard/times/edit/' . $id)
+            return redirect()->route('dashboard.times.edit' . $time->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
@@ -118,7 +114,7 @@ class TimeController extends Controller
             $time->end_time = $request->input('end_time');
             $time->save();
 
-            return redirect('dashboard/times');
+            return redirect()->route('dashboard.times');
         }
     }
 
@@ -128,11 +124,10 @@ class TimeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Time $time)
     {
-        $time = time::find($id);
         $time->delete();
 
-        return redirect('dashboard/times');
+        return redirect()->route('dashboard.times');
     }
 }

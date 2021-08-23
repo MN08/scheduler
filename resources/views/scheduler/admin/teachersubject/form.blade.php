@@ -4,7 +4,7 @@
 @section('content')
 
     <header id="page-header">
-        <h1>User</h1>
+        <h1>Mata Pelajaran</h1>
         <ol class="breadcrumb">
             <li><a href="#">Edit</a></li>
         </ol>
@@ -14,7 +14,7 @@
         <div id="panel-1" class="panel panel-default">
             <div class="panel-heading">
                         <span class="title elipsis">
-                            <strong>Data User</strong>
+                            <strong>Data Mata Pelajaran</strong>
                         </span>
                 {{-- @include('scheduler.partials.help') --}}
 
@@ -25,13 +25,13 @@
             </div>
 
             <div class="panel-body">
+                {{-- @include('scheduler.partials.alert') --}}
 
-                <form action="{{ route($url,$user->id ?? '') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$teachersubject->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @if (isset($user))
+                    @if (isset($teachersubject))
                         @method('put')
                     @endif
-
 
                     <fieldset>
 
@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Nama</label>
-                                    <input type="text" class="form-control" name="name" value="{{old('name')?? $user->name ??'' }}">
+                                    <input type="text" class="form-control" name="name" value="{{old('name')?? $subject->name }}">
                                     @error('name')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -47,14 +47,36 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" name="email" value="{{ old('email')??$user->email ??'' }}">
-                                    @error('email')
+                                    <label>Kode Mata Pelajaran</label>
+                                    <input type="text" class="form-control" name="code" value="{{old('code')?? $subject->code }}">
+                                    @error('code')
+
+                                    <small class="text-muted block text-danger">{{ $message }}</small>
+
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
+                                    <label>Kelas</label>
+                                    <input type="number" class="form-control" name="grade" value="{{old('grade')?? $subject->grade }}">
+                                    @error('grade')
+
+                                    <small class="text-muted block text-danger">{{ $message }}</small>
+
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
+                                    <label>Jumlah Jam</label>
+                                    <input type="number" class="form-control" name="available_time" value="{{old('available_time')?? $subject->available_time }}">
+                                    @error('available_time')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -67,7 +89,7 @@
                     <div class="row">
                         <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                             <button type="submit" class="btn btn-3d btn-teal margin-top-30 pull-right">
-                                {{ $button }}
+                                Simpan
                             </button>
                         </div>
                     </div>

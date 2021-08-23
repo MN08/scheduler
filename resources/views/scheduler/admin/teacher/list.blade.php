@@ -65,7 +65,7 @@
                                 <th scope="row">{{ ($teachers->currentPage()-1) *$teachers->perPage() + $loop->iteration  }}</th>
                                 <td>{{ $teacher->name }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.teachers.edit',['id' => $teacher->id]) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.teachers.edit',$teacher->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $teacher->id }}">
@@ -76,15 +76,15 @@
                                             <div class="modal-content">
                                                 <div class="modal-header bg-primary-rapo">
                                                     <button class="close text-white" data-dismiss="modal"><span class="fa fa-times"></span></button>
-                                                    <h4 class="modal-title text-white">Hapus Kelas</h4>
+                                                    <h4 class="modal-title text-white">Hapus Guru</h4>
                                                   </div>
                                             </div>
                                             <div class="modal-body" style="background-color: white;">
-                                                <p>Apakah anda yakin ingin menghapus class <strong>{{ $teacher->name }}</strong> ?</p>
+                                                <p>Apakah anda yakin ingin menghapus Guru <strong>{{ $teacher->name }}</strong> ?</p>
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.teachers.delete',['id' => $teacher->id])  }}" method="POST">
+                                                <form action="{{route('dashboard.teachers.delete',$teacher->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>

@@ -51,7 +51,7 @@
                                 <td>{{ $time->start_time }}</td>
                                 <td>{{ $time->end_time }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.times.edit',['id' => $time->id]) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.times.edit',$time->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
                                     <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $time->id }}">
@@ -66,11 +66,11 @@
                                                   </div>
                                             </div>
                                             <div class="modal-body" style="background-color: white;">
-                                                <p>Apakah anda yakin ingin menghapus class <strong>{{ $time->name }}</strong> ?</p>
+                                                <p>Apakah anda yakin ingin menghapus Jam Pelajaran ini ?</p>
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.times.delete',['id' => $time->id])  }}" method="POST">
+                                                <form action="{{route('dashboard.times.delete',$time->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>

@@ -27,10 +27,11 @@
             <div class="panel-body">
                 {{-- @include('scheduler.partials.alert') --}}
 
-                <form action="{{ route('dashboard.times.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$time->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    {{-- @method('put')
-                    {{ $method_field ?? '' }} --}}
+                    @if (isset($time))
+                        @method('put')
+                    @endif
 
                     <fieldset>
 
@@ -38,7 +39,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Waktu Mulai</label>
-                                    <input type="text" class="form-control" name="start_time" value="{{old('start_time')?? $time->start_time }}">
+                                    <input type="text" class="form-control" name="start_time" value="{{old('start_time')?? $time->start_time ?? ''}}">
                                     @error('start_time')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -50,7 +51,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Waktu Selesai</label>
-                                    <input type="text" class="form-control" name="end_time" value="{{old('end_time')?? $time->end_time }}">
+                                    <input type="text" class="form-control" name="end_time" value="{{old('end_time')?? $time->end_time ?? ''}}">
                                     @error('end_time')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -64,7 +65,7 @@
                     <div class="row">
                         <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                             <button type="submit" class="btn btn-3d btn-teal margin-top-30 pull-right">
-                                Simpan
+                                {{ $button }}
                             </button>
                         </div>
                     </div>

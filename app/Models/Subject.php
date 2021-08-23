@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Subject extends Model
 {
     use HasFactory;
+
+    public function teachersubject()
+    {
+        return $this->hasMany(\Rapo\Models\TeacherSubject::class);
+    }
 }

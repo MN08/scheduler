@@ -20,8 +20,7 @@ class RoomController extends Controller
 
         $rooms = $rooms->when($search, function ($query) use ($search) {
             return $query->where('code', 'like', '%' . $search . '%')
-                ->orWhere('grade', 'like', '%' . $search . '%')
-                ->orWhere('type', 'like', '%' . $search . '%');
+                ->orWhere('grade', 'like', '%' . $search . '%');
         })
             ->paginate(8);
 
@@ -40,7 +39,10 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.room.form');
+        return view('scheduler.admin.room.form', [
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.rooms.store'
+        ]);
     }
 
     /**
@@ -86,12 +88,13 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Room $room)
     {
-
-        $room = ROOM::find($id);
-
-        return view('scheduler.admin.room.form', ['room' => $room]);
+        return view('scheduler.admin.room.form', [
+            'room'   => $room,
+            'button'    => 'Simpan',
+            'url'       => 'dashboard.rooms.update'
+        ]);
     }
 
     /**
@@ -101,26 +104,23 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Room $room)
     {
-
-        $room = ROOM::find($id);
         $validator = VALIDATOR::make($request->all(), [
             'grade' => 'required',
             'code' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect('dashboard/rooms/edit/' . $id)
+            return redirect()->route('dashboard.rooms.edit' . $room->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
             $room->name = $request->input('grade');
             $room->code = $request->input('code');
-            $room->type = $request->input('type');
             $room->save();
 
-            return redirect('dashboard/rooms');
+            return redirect()->route('dashboard.rooms');
         }
     }
 
@@ -130,11 +130,10 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Room $room)
     {
-        $room = ROOM::find($id);
         $room->delete();
 
-        return redirect('dashboard/rooms');
+        return redirect()->route('dashboard.rooms');
     }
 }

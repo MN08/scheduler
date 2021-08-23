@@ -8,7 +8,7 @@
                     </li>
                     <li>
                         <a href="{{ Route('dashboard.users') }}">
-                            <i class="main-icon et-profile-male"></i> <span>User</span>
+                            <i class="main-icon et-profile-male"></i> <span>Admin</span>
                         </a>
                     </li>
                     <li>
@@ -34,6 +34,11 @@
                     <li>
                         <a href="{{ Route('dashboard.schoolyears') }}">
                             <i class="main-icon et-profile-male"></i> <span>Tahun Ajaran</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ Route('dashboard.teachersubjects') }}">
+                            <i class="main-icon et-profile-male"></i> <span>Pengampu</span>
                         </a>
                     </li>
                     <li>
