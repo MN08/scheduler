@@ -53,8 +53,8 @@
                                     <label for="type">Pilih Semester :</label><br>
                                     <div class="form-group">
                                         <select class="form-control" id="semester" name="semester">
-                                            <option value="Ganjil" {{ $schoolyear->semester == 'Ganjil' ? 'selected' : '' }}>Ganjil</option>
-                                            <option value="Genap" {{ $schoolyear->semester == 'Genap' ? 'selected' : '' }}>Genap</option>
+                                            <option value="Ganjil" {{  (old('semester') ?? $schoolyear->semester ?? '') == 'Ganjil' ? 'selected' : '' }}>Ganjil</option>
+                                            <option value="Genap" {{   (old('semester') ?? $schoolyear->semester ?? '') == 'Genap' ? 'selected' : '' }}>Genap</option>
                                         </select>
                                     </div>
                                     @error('semester')

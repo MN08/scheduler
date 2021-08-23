@@ -34,6 +34,7 @@
                     </div>
 
                     <div class="panel-body">
+                        @if ($schoolyears->total())
 
                         <table id="General-DataTables" data-resources="" class="table table-striped table-bordered table-hover" style="width: 100%;">
                             <thead>
@@ -85,7 +86,11 @@
                         </table>
                         <div class="pull-right">
                             {{$schoolyears->appends($request)->links('pagination::bootstrap-4')}}
-                    </div>
+                        </div>
+
+                        @else
+                            <h4 class="text-center p-3">Data Pengampu Belum Ada</h4>
+                        @endif
 
                     <div class="panel-footer">
                     </div>

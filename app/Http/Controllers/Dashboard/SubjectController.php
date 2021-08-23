@@ -98,7 +98,7 @@ class SubjectController extends Controller
     public function edit(Subject $subject)
     {
         return view('scheduler.admin.subject.form', [
-            'subject' => $subject,
+            'subject'       => $subject,
             'button'        => 'Simpan',
             'url'           => 'dashboard.subjects.update'
         ]);
@@ -111,10 +111,8 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Subject $subject)
     {
-
-        $subject = subject::find($id);
         $validator = VALIDATOR::make($request->all(), [
             'name' => 'required',
             'code' => 'required',
@@ -124,7 +122,7 @@ class SubjectController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('dashboard/subjects/edit/' . $id)
+            return redirect()->route('dashboard.subjects.edit', $subject->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
@@ -135,7 +133,7 @@ class SubjectController extends Controller
             $subject->available_time = $request->input('available_time');
             $subject->save();
 
-            return redirect('dashboard/subjects');
+            return redirect()->route('dashboard.subjects');
         }
     }
 

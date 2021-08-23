@@ -35,6 +35,8 @@
 
                     <div class="panel-body">
 
+                        @if ($times->total())
+
                         <table id="General-DataTables" data-resources="" class="table table-striped table-bordered table-hover" style="width: 100%;">
                             <thead>
                                 <tr>
@@ -85,7 +87,11 @@
                         </table>
                         <div class="pull-right">
                             {{$times->appends($request)->links('pagination::bootstrap-4')}}
-                    </div>
+                        </div>
+
+                        @else
+                            <h4 class="text-center p-3">Data Jam Pelajaran Belum Ada</h4>
+                        @endif
 
                     <div class="panel-footer">
                     </div>

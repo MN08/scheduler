@@ -34,6 +34,8 @@
                     </div>
 
                     <div class="panel-body">
+                        @if ($teachers->total())
+
                        <div class="col-md-12">
                             <div class="row">
                                 <ul class="pull-right">
@@ -99,7 +101,11 @@
                         </table>
                         <div class="pull-right">
                             {{$teachers->appends($request)->links('pagination::bootstrap-4')}}
-                    </div>
+                        </div>
+
+                        @else
+                            <h4 class="text-center p-3">Data Guru Belum Ada</h4>
+                        @endif
 
                     <div class="panel-footer">
                     </div>

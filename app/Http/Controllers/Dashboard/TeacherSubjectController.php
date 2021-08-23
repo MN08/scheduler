@@ -26,12 +26,12 @@ class TeacherSubjectController extends Controller
 
         $request = $request->all();
 
-        $teachersubejects = TeacherSubject::with(['teacher', 'subject', 'room'])->get();
+        $pengampu = TeacherSubject::with(['teacher', 'subject', 'room'])->get();
 
         return view('scheduler.admin.teachersubject.list', [
             'teachersubjects' => $teachersubejects,
             'request' => $request,
-            compact('teachersubject')
+            'pengampu' => $pengampu,
         ]);
     }
 

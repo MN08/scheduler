@@ -34,6 +34,8 @@
                     </div>
 
                     <div class="panel-body">
+                        @if ($teachersubjects->total())
+
                        <div class="col-md-12">
                             <div class="row">
                                 <ul class="pull-right">
@@ -90,7 +92,7 @@
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.teachersubjects.delete','id' => $teachersubject->id)  }}" method="POST">
+                                                <form action="{{route('dashboard.teachersubjects.delete',$teachersubject->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>
@@ -105,7 +107,11 @@
                         </table>
                         <div class="pull-right">
                             {{$teachersubjects->appends($request)->links('pagination::bootstrap-4')}}
-                    </div>
+                        </div>
+
+                        @else
+                            <h4 class="text-center p-3">Data Pengampu Belum Ada</h4>
+                        @endif
 
                     <div class="panel-footer">
                     </div>

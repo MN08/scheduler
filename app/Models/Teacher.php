@@ -11,6 +11,6 @@ class Teacher extends Model
 
     public function teachersubject()
     {
-        return $this->hasMany(\Rapo\Models\TeacherSubject::class);
+        return $this->hasMany(\scheduler\Models\TeacherSubject::class);
     }
 }

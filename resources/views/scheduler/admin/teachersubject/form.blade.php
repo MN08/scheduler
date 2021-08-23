@@ -35,44 +35,50 @@
 
                     <fieldset>
 
+
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Nama</label>
-                                    <input type="text" class="form-control" name="name" value="{{old('name')?? $subject->name }}">
-                                    @error('name')
+                                    <label>Nama Guru</label>
+                                    <select id="teacher_id" name="teacher_id" class="form-control pointer" data-sources="{{ route('dashboard.teachers') }}" data-placeholder="--- Select ---" data-selected="{{ old('teacher_id') ?? $teachersubject->teacher_id ?? '' }}"></select>
+                                    @error('teacher_id')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
                                     @enderror
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Kode Mata Pelajaran</label>
-                                    <input type="text" class="form-control" name="code" value="{{old('code')?? $subject->code }}">
-                                    @error('code')
+                                    <label>Nama Guru</label>
+                                    <select id="subject_id" name="subject_id" class="form-control pointer" data-sources="{{ route('dashboard.subjects') }}" data-placeholder="--- Select ---" data-selected="{{ old('subject_id') ?? $teachersubject->subject_id ?? '' }}"></select>
+                                    @error('subject_id')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
                                     @enderror
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Kelas</label>
-                                    <input type="number" class="form-control" name="grade" value="{{old('grade')?? $subject->grade }}">
-                                    @error('grade')
+                                    <label>Kelas Diampu</label>
+                                    <select id="room_id" name="room_id" class="form-control pointer" data-sources="{{ route('dashboard.rooms') }}" data-placeholder="--- Select ---" data-selected="{{ old('room_id') ?? $teachersubject->room_id ?? '' }}"></select>
+                                    @error('room_id')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
                                     @enderror
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Jumlah Jam</label>
                                     <input type="number" class="form-control" name="available_time" value="{{old('available_time')?? $subject->available_time }}">
@@ -82,14 +88,14 @@
 
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </fieldset>
 
                     <div class="row">
                         <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                             <button type="submit" class="btn btn-3d btn-teal margin-top-30 pull-right">
-                                Simpan
+                                {{ $button }}
                             </button>
                         </div>
                     </div>

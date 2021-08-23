@@ -24,9 +24,8 @@
             </div>
 
             <div class="panel-body">
-                {{-- @include('scheduler.partials.alert') --}}
 
-                <form action="{{ route($url,$subject->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$subject->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @if (isset($subject))
                         @method('put')
@@ -76,8 +75,8 @@
                                     <label for="type">Pilih Tipe Kelas :</label><br>
                                     <div class="form-group">
                                         <select class="form-control" id="type" name="type">
-                                              <option name="Teori" value="{{ 'Teori' ?? old('type')}}">Teori</option>
-                                              <option name="Praktikum" value="{{ 'Praktikum' ?? old('type')}}"">Praktikum<option>
+                                            <option value="Teori" {{  (old('type') ?? $subject->type ?? '') == 'Teori' ? 'selected' : '' }}>Teori</option>
+                                            <option value="Praktikum" {{   (old('Praktikum') ?? $subject->Praktikum ?? '') == 'Praktikum' ? 'selected' : '' }}>Praktikum</option>
                                         </select>
                                     </div>
                                     @error('type')
