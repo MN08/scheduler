@@ -22,7 +22,7 @@ class TeacherSubject extends Model
         'grade'
     ];
 
-    public function teacher()
+    public function teachersubject()
     {
         return $this->belongsTo(App\Models\Teacher::class, 'teacher_id')->withTrashed();
     }
