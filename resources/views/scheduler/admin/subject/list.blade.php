@@ -59,7 +59,6 @@
                                     <th>#</th>
                                     <th>Nama</th>
                                     <th>Kode Mapel</th>
-                                    <th>Kelas</th>
                                     <th>Tipe Kelas</th>
                                     <th>Jumlah Jam</th>
                                     <th>&nbsp;</th>
@@ -71,7 +70,6 @@
                                 <th scope="row">{{ ($subjects->currentPage()-1) *$subjects->perPage() + $loop->iteration  }}</th>
                                 <td>{{ $subject->name }}</td>
                                 <td>{{ $subject->code }}</td>
-                                <td>{{ $subject->grade }}</td>
                                 <td>{{ $subject->type }}</td>
                                 <td>{{ $subject->available_time }}</td>
                                 <td>

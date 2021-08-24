@@ -70,7 +70,7 @@
                                 <th scope="row">{{ ($teachersubjects->currentPage()-1) *$teachersubjects->perPage() + $loop->iteration  }}</th>
                                 <td>{{ $teachersubject->teacher->name }}</td>
                                 <td>{{ $teachersubject->subject->name }}</td>
-                                <td>{{ $teachersubject->room->grade }}</td>
+                                <td>{{ $teachersubject->grade }}</td>
                                 <td>
                                     <a href="{{ route('dashboard.teachersubjects.edit',$teachersubject->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>

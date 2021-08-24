@@ -6,7 +6,7 @@
     <header id="page-header">
         <h1>Mata Pelajaran</h1>
         <ol class="breadcrumb">
-            <li><a href="#">Edit</a></li>
+            <li><a href="#">Form</a></li>
         </ol>
     </header>
 
@@ -40,13 +40,13 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Nama Guru</label>
-                                    <select class="form-control" id="name" name="name">
+                                    <select class="form-control" id="teacher_id" name="teacher_id">
                                         <option value=""> --Silahkan Pilih-- </option>
                                         @foreach ($teachers as $teacher)
-                                            <option value="{{ $teacher->id }}"  {{ (isset($teacher->id) || old('id'))? "selected":"" }}>{{ $teacher->name }}</option>
+                                            <option value="{{ $teacher->id }}"  {{ (isset($teacher->id) || old('id'))? "selected":"" ?? "" }}>{{ $teacher->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('name')
+                                    @error('teacher_id')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -59,13 +59,13 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Mata Pelajaran</label>
-                                    <select class="form-control" id="name" name="name">
+                                    <select class="form-control" id="subject_id" name="subject_id">
                                         <option value=""> -- Select One --</option>
                                         @foreach ($subjects as $subject)
-                                            <option value="{{ $subject->id }}" {{ (isset($subject->id) || old('id'))? "selected":"" }}>{{ $subject->name }}</option>
+                                            <option value="{{ $subject->id }}" {{ (isset($subject->id) || old('id'))? "selected":"" ?? "" }}>{{ $subject->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('name')
+                                    @error('subject_id')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -74,22 +74,15 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="form-group">
-                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Kelas Diampu</label>
-                                    <select class="form-control" id="grade" name="grade">
-                                        <option value=""> -- Select One --</option>
-                                        @foreach ($rooms as $room)
-                                            <option value="{{ $room->id }}" {{ (isset($room->id) || old('id'))? "selected":"" }}>{{ $room->grade }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('grade')
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
+                                <label>Kelas Diampu</label>
+                                <input type="number" class="form-control" name="grade" value="{{ old('grade') ?? $teachersubject->grade ?? '' }}">
+                                @error('grade')
 
-                                    <small class="text-muted block text-danger">{{ $message }}</small>
+                                <small class="text-muted block text-danger">{{ $message }}</small>
 
-                                    @enderror
-                                </div>
+                                @enderror
                             </div>
                         </div>
 
@@ -117,8 +110,6 @@
 
                 </form>
             </div>
-
-            <div class="panel-footer"></div>
         </div>
     </div>
 

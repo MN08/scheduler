@@ -12,7 +12,18 @@ class TeacherSubject extends Model
     use SoftDeletes;
     use HasFactory;
 
-    public function teachersubject()
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'teacher_id',
+        'subject_id',
+        'grade'
+    ];
+
+    public function teacher()
     {
         return $this->belongsTo(App\Models\Teacher::class, 'teacher_id')->withTrashed();
     }
@@ -20,10 +31,5 @@ class TeacherSubject extends Model
     public function subject()
     {
         return $this->belongsTo(App\Models\Subject::class, 'subject_id')->withTrashed();
-    }
-
-    public function room()
-    {
-        return $this->belongsTo(App\Models\Room::class, 'room_id')->withTrashed();
     }
 }

@@ -44,13 +44,11 @@ class TeacherSubjectController extends Controller
     {
         $teachers = Teacher::get();
         $subjects = Subject::get();
-        $rooms = Room::get();
         return view('scheduler.admin.teachersubject.form', [
             'button'    => 'Simpan',
             'url'       => 'dashboard.teachersubjects.store',
             'teachers' => $teachers,
-            'subjects' => $subjects,
-            'rooms' => $rooms,
+            'subjects' => $subjects
         ]);
     }
 
@@ -63,9 +61,9 @@ class TeacherSubjectController extends Controller
     public function store(Request $request, TeacherSubject $teacherSubject)
     {
         $validator = VALIDATOR::make($request->all(), [
-            'teacher_name' => 'required',
-            'subject_name' => 'required',
-            'room_grade' => 'required',
+            'teacher_id' => 'required',
+            'subject_id' => 'required',
+            'grade' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -73,9 +71,9 @@ class TeacherSubjectController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $teacherSubject->name = $request->input('teacher_name');
-            $teacherSubject->name = $request->input('subject_name');
-            $teacherSubject->grade = $request->input('room_grade');
+            $teacherSubject->teacher_id = $request->input('teacher_id');
+            $teacherSubject->subject_id = $request->input('subject_id');
+            $teacherSubject->grade = $request->input('grade');
             $teacherSubject->save();
 
             return redirect()->route('dashboard.teachersubjects');
@@ -103,14 +101,12 @@ class TeacherSubjectController extends Controller
     {
         $teachers = Teacher::get();
         $subjects = Subject::get();
-        $rooms = Room::get();
         return view('scheduler.admin.schoolyear.form', [
             'teachersubject'   => $teacherSubject,
             'button'    => 'Simpan',
             'url'       => 'dashboard.teachersubjects.update',
             'teachers' => $teachers,
             'subjects' => $subjects,
-            'rooms' => $rooms,
         ]);
     }
 
@@ -121,22 +117,22 @@ class TeacherSubjectController extends Controller
      * @param  \App\Models\TeacherSubject  $teacherSubject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TeacherSubject $teacherSubject, Teacher $teacher, Subject $subject, Room $room)
+    public function update(Request $request, TeacherSubject $teacherSubject)
     {
         $validator = VALIDATOR::make($request->all(), [
-            'teacher_name' => 'required',
-            'subject_name' => 'required',
-            'room_grade' => 'required',
+            'teacher_id' => 'required',
+            'subject_id' => 'required',
+            'grade' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('dashboard.teachersubjects.create')
+            return redirect()->route('dashboard.teachersubjects.edit')
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $teacherSubject->teacher->name = $request->input('teacher_name');
-            $teacherSubject->subject->name = $request->input('subject_name');
-            $teacherSubject->room->grade = $request->input('room_grade');
+            $teacherSubject->teacher_id = $request->input('teacher_id');
+            $teacherSubject->subject_id = $request->input('subject_id');
+            $teacherSubject->grade = $request->input('grade');
             $teacherSubject->save();
 
             return redirect()->route('dashboard.teachersubjects');

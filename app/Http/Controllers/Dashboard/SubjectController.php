@@ -57,7 +57,6 @@ class SubjectController extends Controller
         $validator = VALIDATOR::make($request->all(), [
             'name' => 'required',
             'code' => 'required',
-            'grade' => 'required',
             'type' => 'required',
             'available_time' => 'required'
         ]);
@@ -69,7 +68,6 @@ class SubjectController extends Controller
         } else {
             $subject->name = $request->input('name');
             $subject->code = $request->input('code');
-            $subject->grade = $request->input('grade');
             $subject->type = $request->input('type');
             $subject->available_time = $request->input('available_time');
             $subject->save();

@@ -60,18 +60,6 @@
 
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Kelas</label>
-                                    <input type="number" class="form-control" name="grade" value="{{ old('grade') ?? $subject->grade ?? '' }}">
-                                    @error('grade')
-
-                                    <small class="text-muted block text-danger">{{ $message }}</small>
-
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label for="type">Pilih Tipe Kelas :</label><br>
                                     <div class="form-group">
                                         <select class="form-control" id="type" name="type">
