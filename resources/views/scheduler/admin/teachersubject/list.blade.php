@@ -66,8 +66,10 @@
                                 </tr>
                             </thead>
                             @foreach ($teachersubjects as $teachersubject)
+                            {{-- <?= dd($teachersubject); ?> --}}
                             <tr>
                                 <th scope="row">{{ ($teachersubjects->currentPage()-1) *$teachersubjects->perPage() + $loop->iteration  }}</th>
+                                <?= dd($teachersubject->teacher); ?>
                                 <td>{{ $teachersubject->teacher->name }}</td>
                                 <td>{{ $teachersubject->subject->name }}</td>
                                 <td>{{ $teachersubject->grade }}</td>

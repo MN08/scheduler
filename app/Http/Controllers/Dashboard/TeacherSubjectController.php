@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Models\Room;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -28,7 +27,6 @@ class TeacherSubjectController extends Controller
             ->paginate(15);
 
         $request = $request->all();
-        // dd($teachersubjects);
         return view('scheduler.admin.teachersubject.list', [
             'teachersubjects' => $teachersubjects,
             'request' => $request,
