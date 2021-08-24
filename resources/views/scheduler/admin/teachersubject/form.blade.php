@@ -81,7 +81,7 @@
                                     <select class="form-control" id="grade" name="grade">
                                         <option value=""> -- Select One --</option>
                                         @foreach ($rooms as $room)
-                                            <option value="{{ $roomr->id }}" {{ (isset($room->id) || old('id'))? "selected":"" }}>{{ $room->name }}</option>
+                                            <option value="{{ $room->id }}" {{ (isset($room->id) || old('id'))? "selected":"" }}>{{ $room->grade }}</option>
                                         @endforeach
                                     </select>
                                     @error('grade')

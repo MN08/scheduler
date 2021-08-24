@@ -21,16 +21,16 @@ class TeacherSubjectController extends Controller
     {
         $search = $request->input('search');
 
-        $teachersubejects = $teacherSubjects->when($search, function ($query) use ($search) {
+        $teachersubjects = $teacherSubjects->when($search, function ($query) use ($search) {
             return $query->where('name', 'like', '%' . $search . '%')
                 ->orWhere('grade', 'like', '%' . $search . '%');
         })
             ->paginate(15);
 
         $request = $request->all();
-        dd($teacherSubjects);
+        // dd($teachersubjects);
         return view('scheduler.admin.teachersubject.list', [
-            'teachersubjects' => $teachersubejects,
+            'teachersubjects' => $teachersubjects,
             'request' => $request,
         ]);
     }
@@ -48,9 +48,9 @@ class TeacherSubjectController extends Controller
         return view('scheduler.admin.teachersubject.form', [
             'button'    => 'Simpan',
             'url'       => 'dashboard.teachersubjects.store',
-            'teacher' => $teachers,
-            'subject' => $subjects,
-            'room' => $rooms,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
+            'rooms' => $rooms,
         ]);
     }
 
@@ -108,9 +108,9 @@ class TeacherSubjectController extends Controller
             'teachersubject'   => $teacherSubject,
             'button'    => 'Simpan',
             'url'       => 'dashboard.teachersubjects.update',
-            'teacher' => $teachers,
-            'subject' => $subjects,
-            'room' => $rooms,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
+            'rooms' => $rooms,
         ]);
     }
 
