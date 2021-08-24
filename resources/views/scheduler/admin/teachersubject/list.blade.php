@@ -68,10 +68,9 @@
                             @foreach ($teachersubjects as $teachersubject)
                             <tr>
                                 <th scope="row">{{ ($teachersubjects->currentPage()-1) *$teachersubjects->perPage() + $loop->iteration  }}</th>
-                                <td>{{ $teachersubject->name }}</td>
-                                <td>{{ $teachersubject->name }}</td>
-                                <td>{{ $teachersubject->grade }}</td>
-                                {{-- <td>{{ $teachersubject->available_time }}</td> --}}
+                                <td>{{ $teachersubject->teacher->name }}</td>
+                                <td>{{ $teachersubject->subject->name }}</td>
+                                <td>{{ $teachersubject->room->grade }}</td>
                                 <td>
                                     <a href="{{ route('dashboard.teachersubjects.edit',$teachersubject->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>

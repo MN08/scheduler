@@ -9,7 +9,7 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    public function teachersubject()
+    public function teacher()
     {
         return $this->hasMany(\scheduler\Models\TeacherSubject::class);
     }

@@ -40,8 +40,13 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Nama Guru</label>
-                                    <select id="teacher_id" name="teacher_id" class="form-control pointer" data-sources="{{ route('dashboard.teachers') }}" data-placeholder="--- Select ---" data-selected="{{ old('teacher_id') ?? $teachersubject->teacher_id ?? '' }}"></select>
-                                    @error('teacher_id')
+                                    <select class="form-control" id="name" name="name">
+                                        <option value=""> --Silahkan Pilih-- </option>
+                                        @foreach ($teachers as $teacher)
+                                            <option value="{{ $teacher->id }}"  {{ (isset($teacher->id) || old('id'))? "selected":"" }}>{{ $teacher->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('name')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -53,9 +58,14 @@
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Nama Guru</label>
-                                    <select id="subject_id" name="subject_id" class="form-control pointer" data-sources="{{ route('dashboard.subjects') }}" data-placeholder="--- Select ---" data-selected="{{ old('subject_id') ?? $teachersubject->subject_id ?? '' }}"></select>
-                                    @error('subject_id')
+                                    <label>Mata Pelajaran</label>
+                                    <select class="form-control" id="name" name="name">
+                                        <option value=""> -- Select One --</option>
+                                        @foreach ($subjects as $subject)
+                                            <option value="{{ $subject->id }}" {{ (isset($subject->id) || old('id'))? "selected":"" }}>{{ $subject->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('name')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -68,8 +78,13 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Kelas Diampu</label>
-                                    <select id="room_id" name="room_id" class="form-control pointer" data-sources="{{ route('dashboard.rooms') }}" data-placeholder="--- Select ---" data-selected="{{ old('room_id') ?? $teachersubject->room_id ?? '' }}"></select>
-                                    @error('room_id')
+                                    <select class="form-control" id="grade" name="grade">
+                                        <option value=""> -- Select One --</option>
+                                        @foreach ($rooms as $room)
+                                            <option value="{{ $roomr->id }}" {{ (isset($room->id) || old('id'))? "selected":"" }}>{{ $room->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('grade')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 

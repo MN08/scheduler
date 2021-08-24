@@ -9,7 +9,7 @@ class Subject extends Model
 {
     use HasFactory;
 
-    public function teachersubject()
+    public function subject()
     {
         return $this->hasMany(\Rapo\Models\TeacherSubject::class);
     }

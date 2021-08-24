@@ -9,7 +9,7 @@ class Room extends Model
 {
     use HasFactory;
 
-    public function teachersubject()
+    public function room()
     {
         return $this->hasMany(\Rapo\Models\TeacherSubject::class);
     }

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Models\TeacherSubject;
+use App\Models\Room;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
+use App\Models\TeacherSubject;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherSubjectController extends Controller
@@ -25,13 +28,10 @@ class TeacherSubjectController extends Controller
             ->paginate(15);
 
         $request = $request->all();
-
-        $pengampu = TeacherSubject::with(['teacher', 'subject', 'room'])->get();
-
+        dd($teacherSubjects);
         return view('scheduler.admin.teachersubject.list', [
             'teachersubjects' => $teachersubejects,
             'request' => $request,
-            'pengampu' => $pengampu,
         ]);
     }
 
@@ -42,9 +42,15 @@ class TeacherSubjectController extends Controller
      */
     public function create()
     {
+        $teachers = Teacher::get();
+        $subjects = Subject::get();
+        $rooms = Room::get();
         return view('scheduler.admin.teachersubject.form', [
             'button'    => 'Simpan',
-            'url'       => 'dashboard.teachersubjects.store'
+            'url'       => 'dashboard.teachersubjects.store',
+            'teacher' => $teachers,
+            'subject' => $subjects,
+            'room' => $rooms,
         ]);
     }
 
@@ -54,9 +60,26 @@ class TeacherSubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, TeacherSubject $teacherSubject)
     {
-        //
+        $validator = VALIDATOR::make($request->all(), [
+            'teacher_name' => 'required',
+            'subject_name' => 'required',
+            'room_grade' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('dashboard.teachersubjects.create')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $teacherSubject->name = $request->input('teacher_name');
+            $teacherSubject->name = $request->input('subject_name');
+            $teacherSubject->grade = $request->input('room_grade');
+            $teacherSubject->save();
+
+            return redirect()->route('dashboard.teachersubjects');
+        }
     }
 
     /**
@@ -78,10 +101,16 @@ class TeacherSubjectController extends Controller
      */
     public function edit(TeacherSubject $teacherSubject)
     {
+        $teachers = Teacher::get();
+        $subjects = Subject::get();
+        $rooms = Room::get();
         return view('scheduler.admin.schoolyear.form', [
             'teachersubject'   => $teacherSubject,
             'button'    => 'Simpan',
-            'url'       => 'dashboard.teachersubjects.update'
+            'url'       => 'dashboard.teachersubjects.update',
+            'teacher' => $teachers,
+            'subject' => $subjects,
+            'room' => $rooms,
         ]);
     }
 
@@ -92,24 +121,26 @@ class TeacherSubjectController extends Controller
      * @param  \App\Models\TeacherSubject  $teacherSubject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TeacherSubject $teacherSubject)
+    public function update(Request $request, TeacherSubject $teacherSubject, Teacher $teacher, Subject $subject, Room $room)
     {
-        // $validator = VALIDATOR::make($request->all(), [
-        //     'year' => 'required',
-        //     'semester' => 'required'
-        // ]);
+        $validator = VALIDATOR::make($request->all(), [
+            'teacher_name' => 'required',
+            'subject_name' => 'required',
+            'room_grade' => 'required',
+        ]);
 
-        // if ($validator->fails()) {
-        //     return redirect()->route('dashboard.teachersubject.edit' . $teacherSubject->id)
-        //         ->withErrors($validator)
-        //         ->withInput();
-        // } else {
-        //     $teacherSubject->year = $request->input('year');
-        //     $teacherSubject->semester = $request->input('semester');
-        //     $teacherSubject->save();
+        if ($validator->fails()) {
+            return redirect()->route('dashboard.teachersubjects.create')
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $teacherSubject->teacher->name = $request->input('teacher_name');
+            $teacherSubject->subject->name = $request->input('subject_name');
+            $teacherSubject->room->grade = $request->input('room_grade');
+            $teacherSubject->save();
 
-        //     return redirect()->route('dashboard.teachersubjects');
-        // }
+            return redirect()->route('dashboard.teachersubjects');
+        }
     }
 
     /**
@@ -120,6 +151,8 @@ class TeacherSubjectController extends Controller
      */
     public function destroy(TeacherSubject $teacherSubject)
     {
-        //
+        $teacherSubject->delete();
+
+        return redirect()->route('dashboard.teachersubjects');
     }
 }
