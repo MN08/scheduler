@@ -4,7 +4,7 @@
 @section('content')
 
             <header id="page-header">
-                <h1>Pengampu</h1>
+                <h1>Jadwal Pelajaran</h1>
                 <ol class="breadcrumb">
                     <li><a href="#">List</a></li>
                 </ol>
@@ -14,14 +14,14 @@
                 <div id="panel-1" class="panel panel-default">
                     <div class="panel-heading">
                         <span class="title elipsis">
-                            <strong>Data Pengampu</strong>
+                            <strong>Jadwal Pelajaran</strong>
                         </span>
 
                         <ul class="options pull-right list-inline">
 
                             <li>
-                                <a href="{{ route('dashboard.teachersubjects.create') }}" class="btn btn-primary btn-xs btn-block">
-                                    <i class="fa fa-plus"></i>TAMBAH
+                                <a href="{{ route('dashboard.schedules.create') }}" class="btn btn-primary btn-xs btn-block">
+                                    <i class="fa fa-plus"></i>Generate
                                 </a>
                             </li>
                             <li>
@@ -60,7 +60,6 @@
                                     <th>Nama Guru</th>
                                     <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
-                                    {{-- <th>Jumlah Jam</th> --}}
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                 </tr>

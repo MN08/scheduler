@@ -16,11 +16,11 @@ class TeacherSubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, TeacherSubject $teacherSubjects)
+    public function index(Request $request, TeacherSubject $teachersubject)
     {
         $search = $request->input('search');
 
-        $teachersubjects = $teacherSubjects->when($search, function ($query) use ($search) {
+        $teachersubject = $teachersubject->when($search, function ($query) use ($search) {
             return $query->where('name', 'like', '%' . $search . '%')
                 ->orWhere('grade', 'like', '%' . $search . '%');
         })
@@ -28,7 +28,7 @@ class TeacherSubjectController extends Controller
 
         $request = $request->all();
         return view('scheduler.admin.teachersubject.list', [
-            'teachersubjects' => $teachersubjects,
+            'teachersubjects' => $teachersubject,
             'request' => $request,
         ]);
     }
@@ -56,7 +56,7 @@ class TeacherSubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, TeacherSubject $teacherSubject)
+    public function store(Request $request, TeacherSubject $teachersubject)
     {
         $validator = VALIDATOR::make($request->all(), [
             'teacher_id' => 'required',
@@ -69,10 +69,10 @@ class TeacherSubjectController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $teacherSubject->teacher_id = $request->input('teacher_id');
-            $teacherSubject->subject_id = $request->input('subject_id');
-            $teacherSubject->grade = $request->input('grade');
-            $teacherSubject->save();
+            $teachersubject->teacher_id = $request->input('teacher_id');
+            $teachersubject->subject_id = $request->input('subject_id');
+            $teachersubject->grade = $request->input('grade');
+            $teachersubject->save();
 
             return redirect()->route('dashboard.teachersubjects');
         }
@@ -95,12 +95,12 @@ class TeacherSubjectController extends Controller
      * @param  \App\Models\TeacherSubject  $teacherSubject
      * @return \Illuminate\Http\Response
      */
-    public function edit(TeacherSubject $teacherSubject)
+    public function edit(TeacherSubject $teachersubject)
     {
         $teachers = Teacher::get();
         $subjects = Subject::get();
-        return view('scheduler.admin.schoolyear.form', [
-            'teachersubject'   => $teacherSubject,
+        return view('scheduler.admin.teachersubject.form', [
+            'teachersubject'   => $teachersubject,
             'button'    => 'Simpan',
             'url'       => 'dashboard.teachersubjects.update',
             'teachers' => $teachers,
@@ -115,7 +115,7 @@ class TeacherSubjectController extends Controller
      * @param  \App\Models\TeacherSubject  $teacherSubject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TeacherSubject $teacherSubject)
+    public function update(Request $request, TeacherSubject $teachersubject)
     {
         $validator = VALIDATOR::make($request->all(), [
             'teacher_id' => 'required',
@@ -124,14 +124,14 @@ class TeacherSubjectController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('dashboard.teachersubjects.edit')
+            return redirect()->route('dashboard.teachersubjects.edit', $teachersubject->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $teacherSubject->teacher_id = $request->input('teacher_id');
-            $teacherSubject->subject_id = $request->input('subject_id');
-            $teacherSubject->grade = $request->input('grade');
-            $teacherSubject->save();
+            $teachersubject->teacher_id = $request->input('teacher_id');
+            $teachersubject->subject_id = $request->input('subject_id');
+            $teachersubject->grade = $request->input('grade');
+            $teachersubject->save();
 
             return redirect()->route('dashboard.teachersubjects');
         }

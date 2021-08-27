@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class SchoolYear extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'year',
+        'semester',
+    ];
+
+    public function schedule()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

@@ -22,13 +22,18 @@ class TeacherSubject extends Model
         'grade'
     ];
 
-    public function teachersubject()
+    public function teacher()
     {
-        return $this->belongsTo(App\Models\Teacher::class, 'teacher_id')->withTrashed();
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
     public function subject()
     {
-        return $this->belongsTo(App\Models\Subject::class, 'subject_id')->withTrashed();
+        return $this->belongsTo(Subject::class, 'subject_id');
+    }
+
+    public function schedule()
+    {
+        return $this->hasMany(Schedule::class);
     }
 }

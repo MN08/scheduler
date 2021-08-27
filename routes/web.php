@@ -76,9 +76,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/teachersubjects', 'App\Http\Controllers\Dashboard\TeacherSubjectController@index')->name('dashboard.teachersubjects');
     Route::get('/dashboard/teachersubjects/create', 'App\Http\Controllers\Dashboard\TeacherSubjectController@create')->name('dashboard.teachersubjects.create');
     Route::post('/dashboard/teachersubjects', 'App\Http\Controllers\Dashboard\TeacherSubjectController@store')->name('dashboard.teachersubjects.store');
-    Route::get('/dashboard/teachersubjects/{teachersubject}', 'App\Http\Controllers\Dashboard\TeacherSubjectsController@edit')->name('dashboard.teachersubjects.edit');
+    Route::get('/dashboard/teachersubjects/{teachersubject}', 'App\Http\Controllers\Dashboard\TeacherSubjectController@edit')->name('dashboard.teachersubjects.edit');
     Route::put('/dashboard/teachersubjects/{teachersubject}', 'App\Http\Controllers\Dashboard\TeacherSubjectController@update')->name('dashboard.teachersubjects.update');
     Route::delete('/dashboard/teachersubjects/{teachersubject}', 'App\Http\Controllers\Dashboard\TeacherSubjectController@destroy')->name('dashboard.teachersubjects.delete');
+
+    Route::get('/dashboard/schedules', 'App\Http\Controllers\Dashboard\ScheduleController@index')->name('dashboard.schedules');
 });
 
 

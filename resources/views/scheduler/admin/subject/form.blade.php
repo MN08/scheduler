@@ -37,7 +37,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
                                     <label>Nama</label>
-                                    <input type="text" class="form-control" name="name" value="{{ old('name') ?? $subject->name ?? '' }}">
+                                    <input type="text" class="form-control" name="name" value="{{old('name')?? $subject->name ?? '' }}">
                                     @error('name')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
@@ -99,8 +99,6 @@
 
                 </form>
             </div>
-
-            <div class="panel-footer"></div>
         </div>
     </div>
 
