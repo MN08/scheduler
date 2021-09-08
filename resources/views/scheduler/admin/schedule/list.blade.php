@@ -1,10 +1,9 @@
 @extends('scheduler.app')
 
-{{-- Add 3 indent and empty line before & after --}}
 @section('content')
 
             <header id="page-header">
-                <h1>Jadwal Pelajaran</h1>
+                <h1>Jadwal</h1>
                 <ol class="breadcrumb">
                     <li><a href="#">List</a></li>
                 </ol>
@@ -14,7 +13,7 @@
                 <div id="panel-1" class="panel panel-default">
                     <div class="panel-heading">
                         <span class="title elipsis">
-                            <strong>Jadwal Pelajaran</strong>
+                            <strong>Data Jadwal</strong>
                         </span>
 
                         <ul class="options pull-right list-inline">
@@ -34,12 +33,12 @@
                     </div>
 
                     <div class="panel-body">
-                        @if ($teachersubjects->total())
 
+                        @if ($schedules->total())
                        <div class="col-md-12">
                             <div class="row">
                                 <ul class="pull-right">
-                                    <form method="get" action="{{ route('dashboard.teachersubjects') }}">
+                                    <form method="get" action="{{ route('dashboard.schedules') }}">
                                         <div class="input-group">
                                           <input type="text" class="form-control" placeholder="Search" name="search" value="{{ $request['search'] ?? '' }}" />
                                           <div class="input-group-btn">
@@ -57,41 +56,42 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nama Guru</th>
+                                    <th>Hari</th>
+                                    <th>Jam Pelajaran</th>
+                                    <th>Guru</th>
                                     <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
+                                    <th>Mata Pelajaran</th>
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
-                            @foreach ($teachersubjects as $teachersubject)
-                            {{-- <?= dd($teachersubject); ?> --}}
+                            @foreach ($schedules as $schedule)
                             <tr>
-                                <th scope="row">{{ ($teachersubjects->currentPage()-1) *$teachersubjects->perPage() + $loop->iteration  }}</th>
-                                <td>{{ $teachersubject->teacher->name }}</td>
-                                <td>{{ $teachersubject->subject->name }}</td>
-                                <td>{{ $teachersubject->grade }}</td>
+                                <th scope="row">{{ ($schedules->currentPage()-1) *$schedules->perPage() + $loop->iteration  }}</th>
+                                <td>{{ $schedule->teachersubject->grade }}</td>
+                                <td>{{ $schedule->code }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.teachersubjects.edit',$teachersubject->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.schedules.edit',$schedule->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $teachersubject->id }}">
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $schedule->id }}">
                                         <b class="fa fa-trash"></b> Hapus
                                     </button>
-                                    <div class="modal fade" id="modal-delete-{{ $teachersubject->id }}">
+                                    <div class="modal fade" id="modal-delete-{{ $schedule->id }}">
                                         <div class="modal-dialog ">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-primary-rapo">
                                                     <button class="close text-white" data-dismiss="modal"><span class="fa fa-times"></span></button>
-                                                    <h4 class="modal-title text-white">Hapus Data</h4>
+                                                    <h4 class="modal-title text-white">Hapus Kelas</h4>
                                                   </div>
                                             </div>
                                             <div class="modal-body" style="background-color: white;">
-                                                <p>Apakah anda yakin ingin menghapus data pengampu <strong>{{ $teachersubject->name }}</strong> ?</p>
+                                                <p>Apakah anda yakin ingin menghapus Kelas ?</p>
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.teachersubjects.delete',$teachersubject->id)  }}" method="POST">
+                                                <form action="{{route('dashboard.schedules.delete',$schedule->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>
@@ -105,15 +105,12 @@
 
                         </table>
                         <div class="pull-right">
-                            {{$teachersubjects->appends($request)->links('pagination::bootstrap-4')}}
+                            {{$schedules->appends($request)->links('pagination::bootstrap-4')}}
                         </div>
 
                         @else
-                            <h4 class="text-center p-3">Data Pengampu Belum Ada</h4>
+                            <h4 class="text-center p-3">Data Jadwal Belum Ada</h4>
                         @endif
-
-                    <div class="panel-footer">
-                    </div>
                 </div>
             </div>
 

@@ -72,6 +72,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">

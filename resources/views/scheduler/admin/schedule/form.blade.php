@@ -26,7 +26,7 @@
 
             <div class="panel-body">
 
-                <form action="{{ route($url,$teachersubject->id ?? '') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$schedule->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @if (isset($teachersubject))
                         @method('put')
@@ -38,14 +38,14 @@
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Nama Guru</label>
-                                    <select class="form-control" id="teacher_id" name="teacher_id">
+                                    <label>Tahun Ajaran</label>
+                                    <select class="form-control" id="year" name="year">
                                         <option value="">--Silahkan Dipilih--</option>
-                                        @foreach ($teachers as $teacher)
-                                            <option value="{{$teacher->id}}"{{ (old($teacher->id) ?? $teachersubject->teacher->id ?? '') == $teacher->id ? 'selected' : '' }}>{{$teacher->name}}</option>
+                                        @foreach ($schoolyears as $schoolyear)
+                                            <option value="{{$schoolyear->id}}"{{ (old($schoolyear->id) ?? $schoolyear->id ?? '') == $schoolyear->id ? 'selected' : '' }}>{{$schoolyear->year}}</option>
                                         @endforeach
                                     </select>
-                                    @error('teacher_id')
+                                    @error('year')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -57,14 +57,14 @@
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Mata Pelajaran</label>
-                                    <select class="form-control" id="subject_id" name="subject_id">
+                                    <label>Semester</label>
+                                    <select class="form-control" id="semester" name="semester">
                                         <option value="">--Silahkan Dipilih--</option>
-                                        @foreach ($subjects as $subject)
-                                            <option value="{{$subject->id}}"{{ (old($subject->id) ?? $teachersubject->subject->id ?? '') == $subject->id ? 'selected' : '' }}>{{$subject->name}}</option>
+                                        @foreach ($schoolyears as $schoolyear)
+                                            <option value="{{$schoolyear->id}}"{{ (old($schoolyear->id) ?? $schoolyear->id ?? '') == $schoolyear->id ? 'selected' : '' }}>{{$schoolyear->semester}}</option>
                                         @endforeach
                                     </select>
-                                    @error('subject_id')
+                                    @error('semester')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -72,31 +72,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group">
-                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Kelas Diampu</label>
-                                    <input type="number" class="form-control" name="grade" value="{{ old('grade') ?? $teachersubject->grade ?? '' }}">
-                                    @error('grade')
-
-                                    <small class="text-muted block text-danger">{{ $message }}</small>
-
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                            {{-- <div class="form-group">
-                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Jumlah Jam</label>
-                                    <input type="number" class="form-control" name="available_time" value="{{old('available_time')?? $subject->available_time }}">
-                                    @error('available_time')
-
-                                    <small class="text-muted block text-danger">{{ $message }}</small>
-
-                                    @enderror
-                                </div>
-                            </div> --}}
                         </div>
                     </fieldset>
 

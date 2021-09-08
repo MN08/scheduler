@@ -88,7 +88,7 @@
                                                   </div>
                                             </div>
                                             <div class="modal-body" style="background-color: white;">
-                                                <p>Apakah anda yakin ingin menghapus data pengampu <strong>{{ $teachersubject->name }}</strong> ?</p>
+                                                <p>Apakah anda yakin ingin menghapus data pengampu <strong>{{ $teachersubject->teacher->name." ".$teachersubject->subject->name." ".$teachersubject->grade }}</strong> ?</p>
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>

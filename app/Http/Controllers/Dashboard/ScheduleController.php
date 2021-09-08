@@ -3,8 +3,17 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Days;
+use App\Models\Room;
 use App\Models\Schedule;
+use App\Models\Time;
+use App\Models\SchoolYear;
+use App\Models\TeacherSubject;
+use App\Tools\GeneticAlgorithmClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use function Psy\sh;
 
 class ScheduleController extends Controller
 {
@@ -13,19 +22,20 @@ class ScheduleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Schedule $schedule)
+    public function index(Request $request, Schedule $schedules)
     {
         $search = $request->input('search');
 
-        $schedule = $schedule->when($search, function ($query) use ($search) {
+        $schedules = $schedules->when($search, function ($query) use ($search) {
             return $query->where('name', 'like', '%' . $search . '%')
                 ->orWhere('grade', 'like', '%' . $search . '%');
         })
             ->paginate(15);
 
+
         $request = $request->all();
-        return view('scheduler.admin.schedules.list', [
-            'teachersubjects' => $schedule,
+        return view('scheduler.admin.schedule.list', [
+            'schedules' => $schedules,
             'request' => $request,
         ]);
     }
@@ -37,7 +47,20 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        //
+        $teachersubjects = TeacherSubject::get();
+        $schoolyears = SchoolYear::get();
+        $times = Time::get();
+        $days = Days::get();
+        $rooms = Room::get();
+        return view('scheduler.admin.schedule.form', [
+            'button'    => 'Generate',
+            'url'       => 'dashboard.schedules.store',
+            'teachers' => $teachersubjects,
+            'schoolyears' => $schoolyears,
+            'times' => $times,
+            'days' => $days,
+            'rooms' => $rooms,
+        ]);
     }
 
     /**
@@ -46,9 +69,26 @@ class ScheduleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Schedule $schedule)
     {
-        //
+        $teachersubjects = TeacherSubject::get();
+        $times = Time::get();
+        $days = Days::get();
+        $rooms = Room::get();
+        $schoolyears = SchoolYear::get();
+        $geneticAlgotihm = new GeneticAlgorithmClass($teachersubjects, $times, $days, $schoolyears, $rooms);
+        $resultGenerate = $geneticAlgotihm->init();
+        $geneticAlgotihm->generate();
+        dd($resultGenerate);
+        //save result
+        // foreach ($resultGenerate as $result) {
+        //     $schedule->teacher_subject_id = $resultGenerate->teacher_subject_id;
+        //     $schedule->save();
+        // }
+
+        Schedule::insert($resultGenerate);
+
+        return redirect()->route('dashboard.schedules');
     }
 
     /**

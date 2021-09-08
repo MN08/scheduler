@@ -143,9 +143,9 @@ class TeacherSubjectController extends Controller
      * @param  \App\Models\TeacherSubject  $teacherSubject
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TeacherSubject $teacherSubject)
+    public function destroy(TeacherSubject $teachersubject)
     {
-        $teacherSubject->delete();
+        $teachersubject->delete();
 
         return redirect()->route('dashboard.teachersubjects');
     }

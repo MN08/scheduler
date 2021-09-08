@@ -42,7 +42,7 @@
                         </a>
                     </li>
                     <li>
-                        {{-- <a href="{{ Route('dashboard.schedules') }}"> --}}
+                        <a href="{{ Route('dashboard.schedules') }}">
                             <i class="main-icon et-profile-male"></i> <span>Jadwal</span>
                         </a>
                     </li>
