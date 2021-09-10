@@ -21,8 +21,8 @@ class TeacherSubjectController extends Controller
         $search = $request->input('search');
 
         $teachersubject = $teachersubject->when($search, function ($query) use ($search) {
-            return $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('grade', 'like', '%' . $search . '%');
+            return $query->whereHas('name', 'like', '%' . $search . '%')
+                ->orWhereHas('grade', 'like', '%' . $search . '%');
         })
             ->paginate(15);
 

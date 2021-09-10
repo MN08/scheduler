@@ -4,9 +4,9 @@
 @section('content')
 
     <header id="page-header">
-        <h1>Mata Pelajaran</h1>
+        <h1>Lab Class</h1>
         <ol class="breadcrumb">
-            <li><a href="#">Form</a></li>
+            <li><a href="#">Edit</a></li>
         </ol>
     </header>
 
@@ -14,7 +14,7 @@
         <div id="panel-1" class="panel panel-default">
             <div class="panel-heading">
                         <span class="title elipsis">
-                            <strong>Data Mata Pelajaran</strong>
+                            <strong>Data class</strong>
                         </span>
                 {{-- @include('scheduler.partials.help') --}}
 
@@ -25,27 +25,21 @@
             </div>
 
             <div class="panel-body">
+                {{-- @include('scheduler.partials.alert') --}}
 
-                <form action="{{ route($url,$schedule->id ?? '') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($url,$lab->id ?? '') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @if (isset($schedule))
+                    @if (isset($lab))
                         @method('put')
                     @endif
 
                     <fieldset>
-
-
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Tahun Ajaran</label>
-                                    <select class="form-control" id="year" name="year">
-                                        <option value="">--Silahkan Dipilih--</option>
-                                        @foreach ($schoolyears as $schoolyear)
-                                            <option value="{{$schoolyear->id}}"{{ (old($schoolyear->id) ?? $schoolyear->id ?? '') == $schoolyear->id ? 'selected' : '' }}>{{$schoolyear->year}}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('year')
+                                    <label>Lab</label>
+                                    <input type="text" class="form-control" name="name" value="{{old('name')?? $lab->grade ?? '' }}">
+                                    @error('name')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
@@ -57,21 +51,15 @@
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
-                                    <label>Semester</label>
-                                    <select class="form-control" id="semester" name="semester">
-                                        <option value="">--Silahkan Dipilih--</option>
-                                        @foreach ($schoolyears as $schoolyear)
-                                            <option value="{{$schoolyear->id}}"{{ (old($schoolyear->id) ?? $schoolyear->id ?? '') == $schoolyear->id ? 'selected' : '' }}>{{$schoolyear->semester}}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('semester')
+                                    <label>Kode Kelas</label>
+                                    <input type="text" class="form-control" name="code" value="{{old('code')?? $lab->code ?? ''}}">
+                                    @error('code')
 
                                     <small class="text-muted block text-danger">{{ $message }}</small>
 
                                     @enderror
                                 </div>
                             </div>
-                        </div>
                         </div>
                     </fieldset>
 

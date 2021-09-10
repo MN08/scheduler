@@ -37,7 +37,7 @@ class GeneticAlgorithmClass
         $this->populasi = $populasi;
         $this->maxGeneration = $maxGeneration;
     }
-
+    // initate the data/gen
     public function init()
     {
         $this->currentGeneration = 0;
@@ -60,6 +60,7 @@ class GeneticAlgorithmClass
         return $this->individu;
     }
 
+    //check gen fitness
     public function fitness()
     {
         $fitness = [];
@@ -70,6 +71,7 @@ class GeneticAlgorithmClass
         return $fitness;
     }
 
+    //calculate fitness value
     public function calculateFitness($i)
     {
         $penalty = 0;
@@ -132,6 +134,7 @@ class GeneticAlgorithmClass
         return $fitness;
     }
 
+    //select best individu value to become indukan
     public function selection($fitness)
     {
         $rank = [];
@@ -168,6 +171,7 @@ class GeneticAlgorithmClass
         }
     }
 
+    //crossing the indukan data to make
     public function startCrossOver()
     {
         $new_individu = [];
@@ -213,6 +217,7 @@ class GeneticAlgorithmClass
             }
         }
     }
+
 
     public function mutation()
     {
@@ -307,7 +312,7 @@ class GeneticAlgorithmClass
                         }
                         echo "</table>";
                     }
-                    // echo json_encode($sorted->values()->all());
+                    echo json_encode($sorted->values()->all());
                     exit;
                     // $time = $this->times[$solution[]]
                     break;
@@ -318,92 +323,9 @@ class GeneticAlgorithmClass
                 $this->generate();
             }
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
+            // $store = "INSERT INTO Schedule (firstname, lastname, email)
+            // VALUES ('John', 'Doe', 'john@example.com')";
         }
     }
-
-    public function getData()
-    {
-        $i = 0;
-        foreach ($this->teachersubjects as $teachersubject) {
-            $teacherSubject = $teachersubject->id;
-            $teacherName    = $teachersubject->teacher->id;
-            $subjectName    = $teachersubject->subject->id;
-            $subjectType    = $teachersubject->subject->type;
-            $subjectAvailableTime = $teachersubject->subject->available_time;
-            $grade          = $teachersubject->grade;
-            echo $teacherSubject . "<br>" . $teacherName . " " . $subjectName . " " . $subjectType . " " . $grade . " " . $subjectAvailableTime;
-            $i++;
-        }
-
-        foreach ($this->days as $day) {
-            $days    = $day->name;
-            echo $days;
-            $i++;
-        }
-
-        foreach ($this->rooms as $rooms) {
-            $roomGrade    = $rooms->grade;
-            $roomCode   = $rooms->code;
-            echo $roomGrade . " " . $roomCode;
-            $i++;
-        }
-
-        foreach ($this->times as $times) {
-            $endTime    = $times->start_time;
-            $startTime    = $times->end_time;
-            echo $startTime . " " . $endTime;
-            $i++;
-        }
-    }
-
-    public function initiate()
-    {
-        $countTeacherSubject = count($this->teachersubjects);
-        $countTime = count($this->time);
-        $countDay = count($this->day);
-        $countRoom = count($this->rooms);
-
-        for ($i = 0; $i < $this->populasi; $i++) {
-
-            for ($j = 0; $j < $countTeacherSubject; $j++) {
-
-                $sks = $this->sks[$j];
-
-                $this->individu[$i][$j][0] = $j;
-
-                // 2 jam mapel
-                if ($countSubjectAvailableTime % 2 == 0) {
-                    $this->individu[$i][$j][1] = mt_rand(0, ($countTime - 1) - 1);
-                }
-
-                // 4 jam mapel
-                if ($countSubjectAvailableTime % 2 == 2) {
-                    $this->individu[$i][$j][1] = mt_rand(0, ($countTime - 1) - 3);
-                }
-
-                $this->individu[$i][$j][2] = mt_rand(0, $countTime - 1); // Penentuan hari secara acak
-
-                // if ($this->jenis_mk[$j] === $this->TEORI) {
-                //     $this->individu[$i][$j][3] = intval($this->ruangReguler[mt_rand(0, $countRoom - 1)]);
-                // } else {
-                //     $this->individu[$i][$j][3] = intval($this->ruangLaboratorium[mt_rand(0, $jumlah_ruang_lab - 1)]);
-                // }
-            }
-            // dd($individu[$i]);
-        }
-    }
-    // public function generateSchedule()
-    // {
-    //     foreach $teachersubject in $this->$teachersubject{
-    //         $fitnest = $this->checkFitness($da)
-    //             }
-
-    //     return $fixschdule;
-    // }
-
-    // function checkFitness($darta) {
-
-    //     return int(0)
-    // }
 }

@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\models\Room;
+use App\Models\Lab;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class RoomController extends Controller
+class LabController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, room $rooms)
+    public function index(Request $request, Lab $labs)
     {
         $search = $request->input('search');
 
-        $rooms = $rooms->when($search, function ($query) use ($search) {
+        $labs = $labs->when($search, function ($query) use ($search) {
             return $query->where('code', 'like', '%' . $search . '%')
                 ->orWhere('grade', 'like', '%' . $search . '%');
         })
@@ -26,8 +26,8 @@ class RoomController extends Controller
 
         $request = $request->all();
 
-        return view('scheduler.admin.room.list', [
-            'rooms' => $rooms,
+        return view('scheduler.admin.lab.list', [
+            'labs' => $labs,
             'request' => $request,
         ]);
     }
@@ -39,9 +39,9 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.room.form', [
+        return view('scheduler.admin.lab.form', [
             'button'    => 'Simpan',
-            'url'       => 'dashboard.rooms.store'
+            'url'       => 'dashboard.labs.store'
         ]);
     }
 
@@ -51,33 +51,33 @@ class RoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, room $room)
+    public function store(Request $request, Lab $lab)
     {
         $validator = VALIDATOR::make($request->all(), [
-            'grade' => 'required',
+            'name' => 'required',
             'code' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('dashboard.rooms.create')
+            return redirect()->route('dashboard.labrooms.create')
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $room->grade = $request->input('grade');
-            $room->code = $request->input('code');
-            $room->save();
+            $lab->name = $request->input('name');
+            $lab->code = $request->input('code');
+            $lab->save();
 
-            return redirect()->route('dashboard.rooms');
+            return redirect()->route('dashboard.labs');
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Lab  $lab
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Lab $lab)
     {
         //
     }
@@ -85,15 +85,15 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Lab  $lab
      * @return \Illuminate\Http\Response
      */
-    public function edit(Room $room)
+    public function edit(Lab $lab)
     {
-        return view('scheduler.admin.room.form', [
-            'room'   => $room,
+        return view('scheduler.admin.lab.form', [
+            'lab'   => $lab,
             'button'    => 'Simpan',
-            'url'       => 'dashboard.rooms.update'
+            'url'       => 'dashboard.labs.update'
         ]);
     }
 
@@ -101,24 +101,24 @@ class RoomController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Lab  $lab
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request, Lab $lab)
     {
         $validator = VALIDATOR::make($request->all(), [
-            'grade' => 'required',
+            'name' => 'required',
             'code' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('dashboard.rooms.edit' . $room->id)
+            return redirect()->route('dashboard.rooms.edit' . $lab->id)
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $room->grade = $request->input('grade');
-            $room->code = $request->input('code');
-            $room->save();
+            $lab->name = $request->input('name');
+            $lab->code = $request->input('code');
+            $lab->save();
 
             return redirect()->route('dashboard.rooms');
         }
@@ -127,13 +127,11 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Lab  $lab
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Room $room)
+    public function destroy(Lab $lab)
     {
-        $room->delete();
-
-        return redirect()->route('dashboard.rooms');
+        //
     }
 }

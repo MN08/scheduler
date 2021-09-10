@@ -38,6 +38,14 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/dashboard/classes/{room}', 'App\Http\Controllers\Dashboard\RoomController@update')->name('dashboard.rooms.update');
     Route::delete('/dashboard/classes/{room}', 'App\Http\Controllers\Dashboard\RoomController@destroy')->name('dashboard.rooms.delete');
 
+    //labs
+    Route::get('/dashboard/labs', 'App\Http\Controllers\Dashboard\LabController@index')->name('dashboard.labs');
+    Route::get('/dashboard/labs/create', 'App\Http\Controllers\Dashboard\LabController@create')->name('dashboard.labs.create');
+    Route::post('/dashboard/labs', 'App\Http\Controllers\Dashboard\LabController@store')->name('dashboard.labs.store');
+    Route::get('/dashboard/labs/{lab}', 'App\Http\Controllers\Dashboard\LabController@edit')->name('dashboard.labs.edit');
+    Route::put('/dashboard/labs/{lab}', 'App\Http\Controllers\Dashboard\LabController@update')->name('dashboard.labs.update');
+    Route::delete('/dashboard/labs/{lab}', 'App\Http\Controllers\Dashboard\LabController@destroy')->name('dashboard.labs.delete');
+
     //teachers
     Route::get('/dashboard/teachers', 'App\Http\Controllers\Dashboard\teacherController@index')->name('dashboard.teachers');
     Route::get('/dashboard/teachers/create', 'App\Http\Controllers\Dashboard\TeacherController@create')->name('dashboard.teachers.create');
