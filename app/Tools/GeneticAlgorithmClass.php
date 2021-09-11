@@ -47,13 +47,16 @@ class GeneticAlgorithmClass
         $this->times_count = $this->times->count();
         $this->days_count = $this->days->count();
         $this->rooms_count = $this->rooms->count();
+        // $this->grade_count = $this->rooms->count();
 
+        //build random schedule
         for ($i = 0; $i < $this->populasi; $i++) {
             foreach ($this->teachersubjects as $key => $teachersubject) {
                 $this->individu[$i][$key] = [];
                 $this->individu[$i][$key]['times'] = mt_rand(0, $this->times_count - $teachersubject->subject->available_time);
                 $this->individu[$i][$key]['days'] = mt_rand(0, $this->days_count - 1);
                 $this->individu[$i][$key]['rooms'] = mt_rand(0, $this->rooms_count - 1);
+                $this->individu[$i][$key]['grade'] = mt_rand(0, $this->rooms_count - $teachersubject->grade);
             }
         }
 
@@ -64,6 +67,7 @@ class GeneticAlgorithmClass
     public function fitness()
     {
         $fitness = [];
+        //check individu fitness
         for ($i = 0; $i < $this->populasi; $i++) {
             $fitness[$i] = $this->calculateFitness($i);
         }
@@ -82,6 +86,8 @@ class GeneticAlgorithmClass
             $rooms_1 = $this->individu[$i][$key_1]['rooms'];
             $teacher_1 = $teachersubject_1->teacher->id;
             $available_time = $teachersubject_1->subject->available_time;
+            // $class_grade = $this->rooms->grade;
+            // $grade = $teachersubject_1->grade;
 
             foreach ($this->teachersubjects as $key_2 => $teachersubject_2) {
                 $times_2 = $this->individu[$i][$key_2]['times'];
@@ -92,7 +98,7 @@ class GeneticAlgorithmClass
                 if ($key_1 == $key_2) {
                     continue;
                 }
-
+                // rule : cant in same time, same days, same class
                 if (
                     $times_1 == $times_2
                     && $days_1 == $days_2
@@ -100,7 +106,7 @@ class GeneticAlgorithmClass
                 ) {
                     $penalty += 1;
                 }
-
+                // rule : cant in same time, same days, same teacher
                 if (
                     $times_1 == $times_2
                     && $days_1 == $days_2
@@ -109,6 +115,14 @@ class GeneticAlgorithmClass
                     $penalty += 1;
                 }
 
+                // if (
+                //     $grade <> $class_grade
+                // ) {
+                //     $penalty += 1;
+                // }
+
+                // rule : subject cant be in same time, same day, same class/
+                // rule : subject with available_time >2 sparated in 2 days
                 if ($available_time >= 2) {
                     if (
                         $times_1 + ($available_time - 1) == $times_2
@@ -117,7 +131,7 @@ class GeneticAlgorithmClass
                     ) {
                         $penalty += 1;
                     }
-
+                    // rule : subject cant be in same time, same day, same teacher
                     if (
                         $times_1 + ($available_time - 1) == $times_2
                         && $days_1 == $days_2
@@ -154,7 +168,7 @@ class GeneticAlgorithmClass
 
             $total += $rank[$i];
         }
-
+        //shorting fitness value
         $total_rank = count($rank);
         for ($i = 0; $i < $this->populasi; $i++) {
             $target = mt_rand(0, $total - 1);
@@ -175,7 +189,7 @@ class GeneticAlgorithmClass
     public function startCrossOver()
     {
         $new_individu = [];
-
+        // randomly crossing the value from 2 indukan
         for ($i = 0; $i < $this->populasi; $i += 2) {
             $individu_1 = 0;
 
@@ -295,7 +309,6 @@ class GeneticAlgorithmClass
 
                         $schedules->push($schedule);
                     }
-
                     $sorted = $schedules->sortBy(['day_id', 'asc'], ['time_id', 'asc']);
 
                     for ($i = 1; $i <= 6; $i++) {
