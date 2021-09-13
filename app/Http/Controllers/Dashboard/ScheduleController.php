@@ -30,7 +30,11 @@ class ScheduleController extends Controller
             return $query->where('name', 'like', '%' . $search . '%')
                 ->orWhere('grade', 'like', '%' . $search . '%');
         })
+            ->orderBy('room_id', 'asc')
+            ->orderBy('day_id', 'asc')
+            ->orderBy('time_id', 'asc')
             ->paginate(15);
+
 
 
         $request = $request->all();
@@ -78,8 +82,8 @@ class ScheduleController extends Controller
         $schoolyears = SchoolYear::get();
         $geneticAlgotihm = new GeneticAlgorithmClass($teachersubjects, $times, $days, $schoolyears, $rooms);
         $resultGenerate = $geneticAlgotihm->init();
-        $geneticAlgotihm->generate();
-        // dd($geneticAlgotihm->generate()->$schedule);
+        $generateSchedule = $geneticAlgotihm->generate();
+        // dd($generateSchedule);
         //save result
         // for ($i = 1; $i <= 6; $i++) {
         // foreach ($geneticAlgotihm->generate() as $schedule) {
@@ -88,7 +92,7 @@ class ScheduleController extends Controller
         // }
         // }
 
-        Schedule::insert($resultGenerate);
+        // Schedule::insert($resultGenerate);
 
         return redirect()->route('dashboard.schedules');
     }

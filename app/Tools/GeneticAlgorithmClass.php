@@ -3,12 +3,13 @@
 
 namespace App\Tools;
 
-use App\Models\Time;
 use App\Models\Days;
 use App\Models\Room;
+use App\Models\Time;
+use App\Models\Schedule;
 use App\Models\SchoolYear;
 use App\Models\TeacherSubject;
-use App\Models\Schedule;
+use Illuminate\Support\Facades\DB;
 
 class GeneticAlgorithmClass
 {
@@ -56,7 +57,7 @@ class GeneticAlgorithmClass
                 $this->individu[$i][$key]['times'] = mt_rand(0, $this->times_count - $teachersubject->subject->available_time);
                 $this->individu[$i][$key]['days'] = mt_rand(0, $this->days_count - 1);
                 $this->individu[$i][$key]['rooms'] = mt_rand(0, $this->rooms_count - 1);
-                $this->individu[$i][$key]['grade'] = mt_rand(0, $this->rooms_count - $teachersubject->grade);
+                // $this->individu[$i][$key]['grade'] = mt_rand(0, $this->rooms_count - $teachersubject->grade);
             }
         }
 
@@ -274,8 +275,9 @@ class GeneticAlgorithmClass
                     $found = true;
 
                     $solutions = $this->individu[$key];
-
                     $schedules = collect();
+
+
                     foreach ($this->teachersubjects as $teacher_index => $teachersubject) {
                         $solution = $solutions[$teacher_index];
                         $time = $this->times[$solution['times']] ?? null;
@@ -283,10 +285,10 @@ class GeneticAlgorithmClass
                         $room = $this->rooms[$solution['rooms']] ?? null;
 
                         if (!$time || !$day || !$room) {
-                            dump($time);
-                            dump($day);
-                            dump($room);
-                            dump($teachersubject);
+                            // dump($time);
+                            // dump($day);
+                            // dump($room);
+                            // dump($teachersubject);
                             continue;
                         }
 
@@ -298,34 +300,47 @@ class GeneticAlgorithmClass
                         // ];
 
                         $schedule = [
-                            'teacher' => $teachersubject->teacher->name,
-                            'subject' => $teachersubject->subject->name,
-                            'room' => $room->grade . $room->code,
+                            // 'teacher' => $teachersubject->teacher->name,
+                            // 'room' => $room->grade . $room->code,
+                            'teacher_subject_id' => $teachersubject->id,
+                            'room_id' => $room->id,
                             'day_id' => $day->id,
-                            'day' => $day->name,
                             'time_id' => $time->id,
-                            'time' => $time->start_time . ' - ' . $time->end_time,
+                            'school_year_id' => 1,
+                            // 'day' => $day->name,
+                            // 'time' => $time->start_time . ' - ' . $time->end_time,
                         ];
 
                         $schedules->push($schedule);
                     }
-                    $sorted = $schedules->sortBy(['day_id', 'asc'], ['time_id', 'asc']);
-
-                    for ($i = 1; $i <= 6; $i++) {
-                        echo "<table style='width: 100%' border=1>";
-                        foreach ($sorted->where('day_id', $i) as $key => $value) {
-                            echo
-                            "<tr>
-                                <td width=100>{$value['day']}</td>
-                                <td width=100>{$value['time']}</td>
-                                <td width=100>{$value['room']}</td>
-                                <td width=300>{$value['teacher']}</td>
-                                <td>{$value['subject']}</td>
-                            </tr>";
-                        }
-                        echo "</table>";
+                    // return $schedules->toArray();
+                    $to_fill = [];
+                    foreach ($schedules as $schedule) {
+                        $to_fill[] = (array)$schedule;
                     }
-                    echo json_encode($sorted->values()->all());
+                    DB::table('schedules')->where('school_year_id', 1)->delete();
+                    DB::table('schedules')->insert($to_fill);
+
+                    // DB::table('schedules')->delete($to_fill);
+
+                    return true;
+                    // $sorted = $schedules->sortBy(['day_id', 'asc'], ['time_id', 'asc']);
+
+                    // for ($i = 1; $i <= 6; $i++) {
+                    //     echo "<table style='width: 100%' border=1>";
+                    //     foreach ($sorted->where('day_id', $i) as $key => $value) {
+                    //         echo
+                    //         "<tr>
+                    //             <td width=100>{$value['day']}</td>
+                    //             <td width=100>{$value['time']}</td>
+                    //             <td width=100>{$value['room']}</td>
+                    //             <td width=300>{$value['teacher']}</td>
+                    //             <td>{$value['subject']}</td>
+                    //         </tr>";
+                    //     }
+                    //     echo "</table>";
+                    // }
+                    // echo json_encode($sorted->values()->all());
                     exit;
                     // $time = $this->times[$solution[]]
                     break;
@@ -335,10 +350,9 @@ class GeneticAlgorithmClass
             if (!$found && $this->currentGeneration < $this->maxGeneration) {
                 $this->generate();
             }
+            // dd($schedules);
         } catch (\Exception $e) {
-            // dd($e);
-            // $store = "INSERT INTO Schedule (firstname, lastname, email)
-            // VALUES ('John', 'Doe', 'john@example.com')";
+            dd($e);
         }
     }
 }

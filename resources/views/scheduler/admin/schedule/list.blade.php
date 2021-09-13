@@ -61,7 +61,7 @@
                                     <th>Guru</th>
                                     <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
-                                    <th>Mata Pelajaran</th>
+                                    {{-- <th>Mata Pelajaran</th> --}}
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -69,8 +69,12 @@
                             @foreach ($schedules as $schedule)
                             <tr>
                                 <th scope="row">{{ ($schedules->currentPage()-1) *$schedules->perPage() + $loop->iteration  }}</th>
-                                <td>{{ $schedule->teachersubject->grade }}</td>
-                                <td>{{ $schedule->code }}</td>
+                                <td>{{ $schedule->day->name }}</td>
+                                <td>{{ $schedule->time->start_time.'-'.$schedule->time->end_time }}</td>
+                                <td>{{ $schedule->teachersubject->teacher->name }}</td>
+                                <td>{{ $schedule->teachersubject->subject->name }}</td>
+                                <td>{{ $schedule->room->grade.$schedule->room->code }}</td>
+                                {{-- <td>{{ $schedule->code }}</td> --}}
                                 <td>
                                     <a href="{{ route('dashboard.schedules.edit',$schedule->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>

@@ -14,7 +14,9 @@ class Schedule extends Model
     protected $fillable = [
         'teacher_subject_id',
         'time_id',
-        'school_year_id'
+        'school_year_id',
+        'day_id',
+        'room_id',
     ];
 
     public function teachersubject()
@@ -36,5 +38,10 @@ class Schedule extends Model
     public function day()
     {
         return $this->belongsTo(Days::class, 'day_id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
     }
 }
