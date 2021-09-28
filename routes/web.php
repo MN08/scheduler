@@ -63,6 +63,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/dashboard/subjects/{subject}', 'App\Http\Controllers\Dashboard\subjectController@update')->name('dashboard.subjects.update');
     Route::delete('/dashboard/subjects/{subject}', 'App\Http\Controllers\Dashboard\subjectController@destroy')->name('dashboard.subjects.delete');
 
+    //days
+    Route::get('/dashboard/days', 'App\Http\Controllers\Dashboard\DayController@index')->name('dashboard.days');
+    Route::get('/dashboard/days/create', 'App\Http\Controllers\Dashboard\DayController@create')->name('dashboard.days.create');
+    Route::post('/dashboard/days', 'App\Http\Controllers\Dashboard\DayController@store')->name('dashboard.days.store');
+    Route::get('/dashboard/days/{day}', 'App\Http\Controllers\Dashboard\DayController@edit')->name('dashboard.days.edit');
+    Route::put('/dashboard/days/{day}', 'App\Http\Controllers\Dashboard\DayController@update')->name('dashboard.days.update');
+    Route::delete('/dashboard/days/{day}', 'App\Http\Controllers\Dashboard\DayController@destroy')->name('dashboard.days.delete');
 
     //time
     Route::get('/dashboard/times', 'App\Http\Controllers\Dashboard\timeController@index')->name('dashboard.times');

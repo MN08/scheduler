@@ -43,6 +43,7 @@
                                     <th>#</th>
                                     <th>Waktu Mulai</th>
                                     <th>Waktu Selesai</th>
+                                    <th>jam pelajaran ke-</th>
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -52,6 +53,7 @@
                                 <th scope="row">{{ ($times->currentPage()-1) *$times->perPage() + $loop->iteration  }}</th>
                                 <td>{{ $time->start_time }}</td>
                                 <td>{{ $time->end_time }}</td>
+                                <td>{{ $time->sequence }}</td>
                                 <td>
                                     <a href="{{ route('dashboard.times.edit',$time->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>

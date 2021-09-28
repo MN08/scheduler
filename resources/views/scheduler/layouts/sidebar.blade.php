@@ -1,11 +1,11 @@
         <aside id="aside">
             <nav id="sideNav">
                 <ul class="nav nav-list">
-                    <li>
+                    {{-- <li>
                         <a class="dashboard" href="{{ Route('dashboard') }}">
                             <i class="main-icon et-linegraph"></i> <span>Dashboard</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="{{ Route('dashboard.users') }}">
                             <i class="main-icon et-profile-male"></i> <span>Admin</span>
@@ -29,6 +29,11 @@
                     <li>
                         <a href="{{ Route('dashboard.times') }}">
                             <i class="main-icon et-profile-male"></i> <span>Jam Pelajaran</span>
+                        </a>
+                    </li>
+                        <li>
+                        <a class="dashboard" href="{{ Route('dashboard.days') }}">
+                            <i class="main-icon et-linegraph"></i> <span>Hari</span>
                         </a>
                     </li>
                     <li>

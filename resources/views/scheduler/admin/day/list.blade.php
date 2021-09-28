@@ -1,9 +1,10 @@
 @extends('scheduler.app')
 
+{{-- Add 3 indent and empty line before & after --}}
 @section('content')
 
             <header id="page-header">
-                <h1>Jadwal</h1>
+                <h1>Hari</h1>
                 <ol class="breadcrumb">
                     <li><a href="#">List</a></li>
                 </ol>
@@ -13,14 +14,14 @@
                 <div id="panel-1" class="panel panel-default">
                     <div class="panel-heading">
                         <span class="title elipsis">
-                            <strong>Data Jadwal</strong>
+                            <strong>Data Hari</strong>
                         </span>
 
                         <ul class="options pull-right list-inline">
 
                             <li>
-                                <a href="{{ route('dashboard.schedules.create') }}" class="btn btn-primary btn-xs btn-block">
-                                    <i class="fa fa-plus"></i>Generate
+                                <a href="{{ route('dashboard.days.create') }}" class="btn btn-primary btn-xs btn-block">
+                                    <i class="fa fa-plus"></i>TAMBAH
                                 </a>
                             </li>
                             <li>
@@ -33,12 +34,11 @@
                     </div>
 
                     <div class="panel-body">
-
-                        @if ($schedules->total())
+                        @if ($days->total())
                        <div class="col-md-12">
                             <div class="row">
                                 <ul class="pull-right">
-                                    <form method="get" action="{{ route('dashboard.schedules') }}">
+                                    <form method="get" action="{{ route('dashboard.days') }}">
                                         <div class="input-group">
                                           <input type="text" class="form-control" placeholder="Search" name="search" value="{{ $request['search'] ?? '' }}" />
                                           <div class="input-group-btn">
@@ -57,46 +57,37 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Hari</th>
-                                    <th>Jam Pelajaran</th>
-                                    <th>Guru</th>
-                                    <th>Mata Pelajaran</th>
-                                    <th>Kelas</th>
-                                    {{-- <th>Mata Pelajaran</th> --}}
+                                    <th>Jumlah Slot</th>
                                     <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
-                            @foreach ($schedules as $schedule)
+                            @foreach ($days as $day)
                             <tr>
-                                <th scope="row">{{ ($schedules->currentPage()-1) *$schedules->perPage() + $loop->iteration  }}</th>
-                                {{-- {{ print_r($schedule); }} --}}
-                                <td>{{ $schedule->day->name }}</td>
-                                <td>{{ $schedule->time->start_time.'-'.$schedule->time->end_time }}</td>
-                                <td>{{ $schedule->teachersubject->teacher->name }}</td>
-                                <td>{{ $schedule->teachersubject->subject->name }}</td>
-                                <td>{{ $schedule->room->grade.$schedule->room->code }}</td>
-                                {{-- <td>{{ $schedule->code }}</td> --}}
+                                <th scope="row">{{ ($days->currentPage()-1) *$days->perPage() + $loop->iteration  }}</th>
+                                <td>{{ $day->name }}</td>
+                                <td>{{ $day->slot }}</td>
                                 <td>
-                                    <a href="{{ route('dashboard.schedules.edit',$schedule->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
+                                    <a href="{{ route('dashboard.days.edit',$day->id) }}" class="btn btn-info btn-sm"><b class="fa fa-edit"></b> Ubah</a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $schedule->id }}">
+                                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{ $day->id }}">
                                         <b class="fa fa-trash"></b> Hapus
                                     </button>
-                                    <div class="modal fade" id="modal-delete-{{ $schedule->id }}">
+                                    <div class="modal fade" id="modal-delete-{{ $day->id }}">
                                         <div class="modal-dialog ">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-primary-rapo">
                                                     <button class="close text-white" data-dismiss="modal"><span class="fa fa-times"></span></button>
-                                                    <h4 class="modal-title text-white">Hapus Kelas</h4>
+                                                    <h4 class="modal-title text-white">Hapus Hari</h4>
                                                   </div>
                                             </div>
                                             <div class="modal-body" style="background-color: white;">
-                                                <p>Apakah anda yakin ingin menghapus Kelas ?</p>
+                                                <p>Apakah anda yakin ingin menghapus Hari <strong>{{ $day->name."dengan slot"." ".$day->slot }}</strong> ?</p>
                                             </div>
                                             <div class="modal-footer" style="background-color: white;">
                                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-                                                <form action="{{route('dashboard.schedules.delete',$schedule->id)  }}" method="POST">
+                                                <form action="{{route('dashboard.days.delete',$day->id)  }}" method="POST">
                                                     @csrf
                                                     @method('delete')
                                                     <button class="btn btn-danger btn-sm"><b class="fa fa-trash"></b> Hapus</button>
@@ -110,12 +101,15 @@
 
                         </table>
                         <div class="pull-right">
-                            {{$schedules->appends($request)->links('pagination::bootstrap-4')}}
+                            {{$days->appends($request)->links('pagination::bootstrap-4')}}
                         </div>
 
                         @else
-                            <h4 class="text-center p-3">Data Jadwal Belum Ada</h4>
+                            <h4 class="text-center p-3">Data Kelas Belum Ada</h4>
                         @endif
+
+                    <div class="panel-footer">
+                    </div>
                 </div>
             </div>
 

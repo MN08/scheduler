@@ -3,25 +3,27 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Time;
-use Illuminate\Http\Request;
+use App\Models\Days;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
-class TimeController extends Controller
+class DayController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, time $times)
+    public function index(Request $request, Days $days)
     {
-        $times = $times->paginate(15);
+        // $search = $request->input('search');
+
+        $days = $days->paginate(8);
 
         $request = $request->all();
 
-        return view('scheduler.admin.time.list', [
-            'times' => $times,
+        return view('scheduler.admin.day.list', [
+            'days' => $days,
             'request' => $request,
         ]);
     }
@@ -33,9 +35,9 @@ class TimeController extends Controller
      */
     public function create()
     {
-        return view('scheduler.admin.time.form', [
+        return view('scheduler.admin.day.form', [
             'button'    => 'Simpan',
-            'url'       => 'dashboard.times.store'
+            'url'       => 'dashboard.days.store'
         ]);
     }
 
@@ -45,26 +47,23 @@ class TimeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Time $time)
+    public function store(Request $request, Days $day)
     {
         $validator = VALIDATOR::make($request->all(), [
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'is_break' => 'required',
+            'name' => 'required',
+            'slot' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('dashboard.times.create')
+            return redirect()->route('dashboard.days.create')
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $time->start_time = $request->input('start_time');
-            $time->end_time = $request->input('end_time');
-            $time->is_break = $request->input('is_break');
-            $time->sequence = $request->input('sequence');
-            $time->save();
+            $day->name = $request->input('name');
+            $day->slot = $request->input('slot');
+            $day->save();
 
-            return redirect()->route('dashboard.times');
+            return redirect()->route('dashboard.days');
         }
     }
 
@@ -85,12 +84,12 @@ class TimeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Time $time)
+    public function edit(Days $day)
     {
-        return view('scheduler.admin.time.form', [
-            'time'      => $time,
+        return view('scheduler.admin.day.form', [
+            'day'   => $day,
             'button'    => 'Simpan',
-            'url'       => 'dashboard.times.update'
+            'url'       => 'dashboard.days.update'
         ]);
     }
 
@@ -101,26 +100,23 @@ class TimeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Time $time)
+    public function update(Request $request, Days $day)
     {
         $validator = VALIDATOR::make($request->all(), [
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'is_break' => 'required'
+            'name' => 'required',
+            'slot' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('dashboard.times.edit' . $time->id)
+            return redirect()->route('dashboard.days.create')
                 ->withErrors($validator)
                 ->withInput();
         } else {
-            $time->start_time = $request->input('start_time');
-            $time->end_time = $request->input('end_time');
-            $time->is_break = $request->input('is_break');
-            $time->sequence = $request->input('sequence');
-            $time->save();
+            $day->name = $request->input('name');
+            $day->slot = $request->input('slot');
+            $day->save();
 
-            return redirect()->route('dashboard.times');
+            return redirect()->route('dashboard.days');
         }
     }
 
@@ -130,10 +126,10 @@ class TimeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Time $time)
+    public function destroy(Days $day)
     {
-        $time->delete();
+        $day->delete();
 
-        return redirect()->route('dashboard.times');
+        return redirect()->route('dashboard.days');
     }
 }

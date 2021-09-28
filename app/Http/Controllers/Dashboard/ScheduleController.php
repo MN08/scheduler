@@ -84,9 +84,10 @@ class ScheduleController extends Controller
         $resultGenerate = $geneticAlgotihm->init();
         $generateSchedule = $geneticAlgotihm->generate();
         // dd($generateSchedule);
+        exit;
         //save result
         // for ($i = 1; $i <= 6; $i++) {
-        // foreach ($geneticAlgotihm->generate() as $schedule) {
+        // foreach ($generateSchedule as $schedule) {
         // $schedule->teacher_subject_id = $geneticAlgotihm->teacher_subject_id;
         // $schedule->save();
         // }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDaysonSchedulesTable extends Migration
+class AddSlotColumntoDaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,9 @@ class AddDaysonSchedulesTable extends Migration
      */
     public function up()
     {
-        Schema::table('schedules', function (Blueprint $table) {
+        Schema::table('days', function (Blueprint $table) {
             $table
-                ->unsignedBigInteger('day_id')->after('id');
-
-            $table
-                ->foreign('day_id')
-                ->references('id')
-                ->on('days')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->tinyInteger('slot')->after('name');
         });
     }
 

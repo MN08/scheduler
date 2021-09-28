@@ -60,6 +60,40 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
+                                    <label for="type">Jam Istirahat atau Jam Pelajaran :</label><br>
+                                    <div class="form-group">
+                                        <select class="form-control" id="is_break" name="is_break">
+                                            <option value="1" {{  (old('is_break') ?? $time->is_break ?? '') == '1' ? 'selected' : '' }}>Jam Istirahat</option>
+                                            <option value="0" {{   (old('is_break') ?? $time->is_break ?? '') == '0' ? 'selected' : '' }}>Jam Pelajaran</option>
+                                        </select>
+                                    </div>
+                                    @error('is_break')
+
+                                    <small class="text-muted block text-danger">{{ $message }}</small>
+
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-md-offset-3 col-md-6 col-sm-6">
+                                    <label>Jam Pelajaran Ke-</label>
+                                    <input type="text" class="form-control" name="sequence" value="{{old('sequence')?? $time->sequence ?? ''}}">
+                                    @error('sequence')
+
+                                    <small class="text-muted block text-danger">{{ $message }}</small>
+
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
 
                     <div class="row">

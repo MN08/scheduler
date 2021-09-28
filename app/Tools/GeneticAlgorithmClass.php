@@ -27,6 +27,8 @@ class GeneticAlgorithmClass
     public $days;
     public $schoolyears;
     public $rooms;
+    // public $class_grade;
+    // public $teachgrade;
     public function __construct($teachersubjects, $times, $days, $schoolyears, $rooms, $populasi = 10, $maxGeneration = 10000)
     {
         $this->teachersubjects = $teachersubjects;
@@ -43,6 +45,9 @@ class GeneticAlgorithmClass
     {
         $this->currentGeneration = 0;
         $this->individu = [];
+
+        // $this->rooms->grade = $classGrade;
+        // $this->teachersubjects->grade = $teachGrade;
 
         $this->teacher_count = $this->teachersubjects->count();
         $this->times_count = $this->times->count();
@@ -87,8 +92,6 @@ class GeneticAlgorithmClass
             $rooms_1 = $this->individu[$i][$key_1]['rooms'];
             $teacher_1 = $teachersubject_1->teacher->id;
             $available_time = $teachersubject_1->subject->available_time;
-            // $class_grade = $this->rooms->grade;
-            // $grade = $teachersubject_1->grade;
 
             foreach ($this->teachersubjects as $key_2 => $teachersubject_2) {
                 $times_2 = $this->individu[$i][$key_2]['times'];
@@ -117,7 +120,7 @@ class GeneticAlgorithmClass
                 }
 
                 // if (
-                //     $grade <> $class_grade
+                //     $teachGrade != $classGrade
                 // ) {
                 //     $penalty += 1;
                 // }
@@ -321,7 +324,6 @@ class GeneticAlgorithmClass
                     DB::table('schedules')->where('school_year_id', 1)->delete();
                     DB::table('schedules')->insert($to_fill);
 
-                    // DB::table('schedules')->delete($to_fill);
 
                     return true;
                     // $sorted = $schedules->sortBy(['day_id', 'asc'], ['time_id', 'asc']);

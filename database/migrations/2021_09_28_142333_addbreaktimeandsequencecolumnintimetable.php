@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDaysonSchedulesTable extends Migration
+class Addbreaktimeandsequencecolumnintimetable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,11 @@ class AddDaysonSchedulesTable extends Migration
      */
     public function up()
     {
-        Schema::table('schedules', function (Blueprint $table) {
+        Schema::table('times', function (Blueprint $table) {
             $table
-                ->unsignedBigInteger('day_id')->after('id');
-
+                ->tinyInteger('is_break')->after('end_time');
             $table
-                ->foreign('day_id')
-                ->references('id')
-                ->on('days')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->tinyInteger('sequence')->nullable()->after('is_break');
         });
     }
 
@@ -33,6 +28,5 @@ class AddDaysonSchedulesTable extends Migration
      */
     public function down()
     {
-        //
     }
 }
