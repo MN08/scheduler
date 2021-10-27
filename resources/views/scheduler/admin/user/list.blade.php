@@ -19,11 +19,11 @@
 
                         <ul class="options pull-right list-inline">
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('dashboard.users.create') }}" class="btn btn-primary btn-xs btn-block">
                                     <i class="fa fa-plus"></i>TAMBAH
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="#" class="opt panel_colapse" data-toggle="tooltip" title="Colapse" data-placement="bottom"></a>
                             </li>

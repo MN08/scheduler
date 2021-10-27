@@ -53,7 +53,7 @@ class ScheduleController extends Controller
     {
         $teachersubjects = TeacherSubject::get();
         $schoolyears = SchoolYear::get();
-        $times = Time::get();
+        $times = Time::whereRaw('sequence % 2 !=0')->whereIsBreak(0)->get();
         $days = Days::get();
         $rooms = Room::get();
         return view('scheduler.admin.schedule.form', [
@@ -76,22 +76,18 @@ class ScheduleController extends Controller
     public function store(Request $request, Schedule $schedule)
     {
         $teachersubjects = TeacherSubject::get();
-        $times = Time::get();
+        // $times = Time::get();
+        $times = Time::whereRaw('sequence % 2 !=0')->whereIsBreak(0)->get();
+        $all_times = Time::whereIsBreak(0)->get();
         $days = Days::get();
         $rooms = Room::get();
         $schoolyears = SchoolYear::get();
-        $geneticAlgotihm = new GeneticAlgorithmClass($teachersubjects, $times, $days, $schoolyears, $rooms);
+        $geneticAlgotihm = new GeneticAlgorithmClass($teachersubjects, $times, $all_times, $days, $schoolyears, $rooms);
         $resultGenerate = $geneticAlgotihm->init();
         $generateSchedule = $geneticAlgotihm->generate();
         // dd($generateSchedule);
-        exit;
+        // exit;
         //save result
-        // for ($i = 1; $i <= 6; $i++) {
-        // foreach ($generateSchedule as $schedule) {
-        // $schedule->teacher_subject_id = $geneticAlgotihm->teacher_subject_id;
-        // $schedule->save();
-        // }
-        // }
 
         // Schedule::insert($resultGenerate);
 

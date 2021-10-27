@@ -27,53 +27,64 @@ class GeneticAlgorithmClass
     public $days;
     public $schoolyears;
     public $rooms;
-    // public $class_grade;
-    // public $teachgrade;
-    public function __construct($teachersubjects, $times, $days, $schoolyears, $rooms, $populasi = 10, $maxGeneration = 10000)
+    public function __construct($teachersubjects, $times, $all_times, $days, $schoolyears, $rooms, $populasi = 10, $maxGeneration = 10000)
     {
         $this->teachersubjects = $teachersubjects;
         $this->times = $times;
+        $this->all_times = $all_times;
         $this->days = $days;
-        // $this->subjects = $subjects;
         $this->schoolyears = $schoolyears;
         $this->rooms = $rooms;
         $this->populasi = $populasi;
         $this->maxGeneration = $maxGeneration;
+        // $this->subjects = $subjects;
     }
-    // initate the data/gen
+
     public function init()
     {
         $this->currentGeneration = 0;
         $this->individu = [];
 
-        // $this->rooms->grade = $classGrade;
-        // $this->teachersubjects->grade = $teachGrade;
+        // $this->teacher_count = $this->teachersubjects->count();
+        // $this->times_count = $this->times->count();
+        // $this->days_count = $this->days->count();
+        // $this->rooms_count = $this->rooms->count();
 
-        $this->teacher_count = $this->teachersubjects->count();
-        $this->times_count = $this->times->count();
-        $this->days_count = $this->days->count();
-        $this->rooms_count = $this->rooms->count();
-        // $this->grade_count = $this->rooms->count();
+        // $this->all_times = $this->times->getRelated()->whereIsBreak(0)->get();
 
-        //build random schedule
+        $this->teacher_ids = $this->teachersubjects->pluck('id');
+        $this->time_ids = $this->times->pluck('id');
+        $this->day_ids = $this->days->pluck('id');
+        $this->room_ids = $this->rooms->pluck('id');
+        // dd($this->time_ids);
+
+        $this->teacher_population = [];
         for ($i = 0; $i < $this->populasi; $i++) {
+            $this->teacher_subject_count = 0;
             foreach ($this->teachersubjects as $key => $teachersubject) {
-                $this->individu[$i][$key] = [];
-                $this->individu[$i][$key]['times'] = mt_rand(0, $this->times_count - $teachersubject->subject->available_time);
-                $this->individu[$i][$key]['days'] = mt_rand(0, $this->days_count - 1);
-                $this->individu[$i][$key]['rooms'] = mt_rand(0, $this->rooms_count - 1);
-                // $this->individu[$i][$key]['grade'] = mt_rand(0, $this->rooms_count - $teachersubject->grade);
+                $available_time = $teachersubject->subject->available_time / 2;
+                // $room_ids = $this->rooms->where('grade', $teachersubject->grade)->pluck('id');
+
+
+                for ($j = 0; $j < $available_time; $j++) {
+                    $this->individu[$i][$this->teacher_subject_count] = [];
+                    $this->individu[$i][$this->teacher_subject_count]['times'] = $this->time_ids->random();
+                    $this->individu[$i][$this->teacher_subject_count]['days'] = $this->day_ids->random();
+                    $this->individu[$i][$this->teacher_subject_count]['rooms'] = $this->room_ids->random();
+
+                    $this->teacher_population[$this->teacher_subject_count] = $teachersubject;
+
+                    $this->teacher_subject_count++;
+                }
             }
         }
 
         return $this->individu;
     }
 
-    //check gen fitness
     public function fitness()
     {
         $fitness = [];
-        //check individu fitness
         for ($i = 0; $i < $this->populasi; $i++) {
             $fitness[$i] = $this->calculateFitness($i);
         }
@@ -81,36 +92,27 @@ class GeneticAlgorithmClass
         return $fitness;
     }
 
-    //calculate fitness value
     public function calculateFitness($i)
     {
         $penalty = 0;
 
-        foreach ($this->teachersubjects as $key_1 => $teachersubject_1) {
-            $times_1 = $this->individu[$i][$key_1]['times'];
-            $days_1 = $this->individu[$i][$key_1]['days'];
-            $rooms_1 = $this->individu[$i][$key_1]['rooms'];
-            $teacher_1 = $teachersubject_1->teacher->id;
-            $available_time = $teachersubject_1->subject->available_time;
+        for ($j = 0; $j < $this->teacher_subject_count; $j++) {
+            $times_1 = $this->individu[$i][$j]['times'];
+            $days_1 = $this->individu[$i][$j]['days'];
+            $rooms_1 = $this->individu[$i][$j]['rooms'];
+            $teacher_1 = $this->teacher_population[$j]->teacher_id;
+            $subject_1 = $this->teacher_population[$j]->subject_id;
 
-            foreach ($this->teachersubjects as $key_2 => $teachersubject_2) {
-                $times_2 = $this->individu[$i][$key_2]['times'];
-                $days_2 = $this->individu[$i][$key_2]['days'];
-                $rooms_2 = $this->individu[$i][$key_2]['rooms'];
-                $teacher_2 = $teachersubject_2->teacher->id;
+            for ($k = 0; $k < $this->teacher_subject_count; $k++) {
+                $times_2 = $this->individu[$i][$k]['times'];
+                $days_2 = $this->individu[$i][$k]['days'];
+                $rooms_2 = $this->individu[$i][$k]['rooms'];
+                $teacher_2 = $this->teacher_population[$k]->teacher_id;
+                $subject_2 = $this->teacher_population[$k]->subject_id;
 
-                if ($key_1 == $key_2) {
+                if ($j == $k) {
                     continue;
                 }
-                // rule : cant in same time, same days, same class
-                if (
-                    $times_1 == $times_2
-                    && $days_1 == $days_2
-                    && $rooms_1 == $rooms_2
-                ) {
-                    $penalty += 1;
-                }
-                // rule : cant in same time, same days, same teacher
                 if (
                     $times_1 == $times_2
                     && $days_1 == $days_2
@@ -119,30 +121,21 @@ class GeneticAlgorithmClass
                     $penalty += 1;
                 }
 
-                // if (
-                //     $teachGrade != $classGrade
-                // ) {
-                //     $penalty += 1;
-                // }
+                if (
+                    $rooms_1 == $rooms_2
+                    && $days_1 == $days_2
+                    && $subject_1 == $subject_2
+                ) {
+                    $penalty += 1;
+                }
 
-                // rule : subject cant be in same time, same day, same class/
-                // rule : subject with available_time >2 sparated in 2 days
-                if ($available_time >= 2) {
-                    if (
-                        $times_1 + ($available_time - 1) == $times_2
-                        && $days_1 == $days_2
-                        && $rooms_1 == $rooms_2
-                    ) {
-                        $penalty += 1;
-                    }
-                    // rule : subject cant be in same time, same day, same teacher
-                    if (
-                        $times_1 + ($available_time - 1) == $times_2
-                        && $days_1 == $days_2
-                        && $teacher_1 == $teacher_2
-                    ) {
-                        $penalty += 1;
-                    }
+
+                if (
+                    $times_1 == $times_2
+                    && $days_1 == $days_2
+                    && $rooms_1 == $rooms_2
+                ) {
+                    $penalty += 1;
                 }
             }
         }
@@ -152,7 +145,6 @@ class GeneticAlgorithmClass
         return $fitness;
     }
 
-    //select best individu value to become indukan
     public function selection($fitness)
     {
         $rank = [];
@@ -172,7 +164,7 @@ class GeneticAlgorithmClass
 
             $total += $rank[$i];
         }
-        //shorting fitness value
+
         $total_rank = count($rank);
         for ($i = 0; $i < $this->populasi; $i++) {
             $target = mt_rand(0, $total - 1);
@@ -189,21 +181,20 @@ class GeneticAlgorithmClass
         }
     }
 
-    //crossing the indukan data to make
     public function startCrossOver()
     {
         $new_individu = [];
-        // randomly crossing the value from 2 indukan
+
         for ($i = 0; $i < $this->populasi; $i += 2) {
             $individu_1 = 0;
 
             $crossOver = mt_rand(0, mt_getrandmax() - 1) / mt_getrandmax();
 
             if ($crossOver < $this->crossOver) {
-                $individu_2 = mt_rand(0, $this->teacher_count - 2);
+                $individu_2 = mt_rand(0, $this->teacher_subject_count - 2);
 
                 while ($individu_1 <= $individu_2) {
-                    $individu_1 = mt_rand(0, $this->teacher_count - 1);
+                    $individu_1 = mt_rand(0, $this->teacher_subject_count - 1);
                 }
 
                 for ($j = 0; $j < $individu_2; $j++) {
@@ -216,12 +207,12 @@ class GeneticAlgorithmClass
                     $new_individu[$i + 1][$j] = $this->individu[$this->induk[$i]][$j];
                 }
 
-                for ($j = $individu_1; $j < $this->teacher_count; $j++) {
+                for ($j = $individu_1; $j < $this->teacher_subject_count; $j++) {
                     $new_individu[$i][$j] = $this->individu[$this->induk[$i]][$j];
                     $new_individu[$i + 1][$j] = $this->individu[$this->induk[$i + 1]][$j];
                 }
             } else {
-                for ($j = 0; $j < $this->teacher_count; $j++) {
+                for ($j = 0; $j < $this->teacher_subject_count; $j++) {
                     $new_individu[$i][$j] = $this->individu[$this->induk[$i]][$j];
                     $new_individu[$i + 1][$j] = $this->individu[$this->induk[$i + 1]][$j];
                 }
@@ -229,28 +220,29 @@ class GeneticAlgorithmClass
         }
 
         for ($i = 0; $i < $this->populasi; $i += 2) {
-            for ($j = 0; $j < $this->teacher_count; $j++) {
+            for ($j = 0; $j < $this->teacher_subject_count; $j++) {
                 $this->individu[$this->induk[$i]][$j] = $new_individu[$i][$j];
                 $this->individu[$this->induk[$i + 1]][$j] = $new_individu[$i + 1][$j];
             }
         }
     }
 
-
     public function mutation()
     {
         $fitness = [];
         $ratio = mt_rand(0, mt_getrandmax() - 1) / mt_getrandmax();
-        $this->teacher_count = $this->teachersubjects->count();
 
         for ($i = 0; $i < $this->populasi; $i++) {
             if ($ratio < $this->mutasi) {
-                $teacher = mt_rand(0, $this->teacher_count - 1);
-                $available_time = $this->teachersubjects[$teacher]->available_time;
+                $teacher_random = mt_rand(0, $this->teacher_subject_count - 1);
+                $teachersubject = $this->teacher_population[$teacher_random];
 
-                $this->individu[$i][$teacher]['times'] = mt_rand(0, $this->times_count - $available_time);
-                $this->individu[$i][$teacher]['days'] = mt_rand(0, $this->days_count - 1);
-                $this->individu[$i][$teacher]['rooms'] = mt_rand(0, $this->rooms_count - 1);
+                // $room_ids = $this->rooms->where('grade', $teachersubject->grade)->pluck('id');
+
+                $this->individu[$i][$teacher_random] = [];
+                $this->individu[$i][$teacher_random]['times'] = $this->time_ids->random();
+                $this->individu[$i][$teacher_random]['days'] = $this->day_ids->random();
+                $this->individu[$i][$teacher_random]['rooms'] = $this->room_ids->random();
             }
 
             $fitness[$i] = $this->calculateFitness($i);
@@ -278,70 +270,72 @@ class GeneticAlgorithmClass
                     $found = true;
 
                     $solutions = $this->individu[$key];
+
                     $schedules = collect();
+                    for ($x = 0; $x < $this->teacher_subject_count; $x++) {
+                        $solution = $solutions[$x];
 
-
-                    foreach ($this->teachersubjects as $teacher_index => $teachersubject) {
-                        $solution = $solutions[$teacher_index];
-                        $time = $this->times[$solution['times']] ?? null;
-                        $day = $this->days[$solution['days']] ?? null;
-                        $room = $this->rooms[$solution['rooms']] ?? null;
+                        $time = $this->times->where('id', $solution['times'])->first();
+                        $day = $this->days->where('id', $solution['days'])->first();
+                        $room = $this->rooms->where('id', $solution['rooms'])->first();
+                        $teachersubject = $this->teacher_population[$x] ?? null;
 
                         if (!$time || !$day || !$room) {
-                            // dump($time);
-                            // dump($day);
-                            // dump($room);
-                            // dump($teachersubject);
+                            dump("Solutions", $solution);
+                            dump("All Room", $this->rooms);
+                            dump("All Time", $this->all_times);
+                            dump("All Day", $this->days);
+                            dump($time, $day, $room);
+                            dd("ERROR");
                             continue;
                         }
 
-                        // $schedules[] = [
-                        //     'teacher_subject_id ' => $teachersubject->id,
-                        //     'time_id' => $time->id,
-                        //     'day_id' => $day->id,
-                        //     'room_id' => $room->id,
-                        // ];
+                        $time_next = $this->all_times->where('sequence', $time->sequence + 1)->first();
 
                         $schedule = [
-                            // 'teacher' => $teachersubject->teacher->name,
-                            // 'room' => $room->grade . $room->code,
                             'teacher_subject_id' => $teachersubject->id,
-                            'room_id' => $room->id,
-                            'day_id' => $day->id,
+                            'teacher_id' => $teachersubject->teacher->name,
+                            'subject_id' => $teachersubject->subject->name,
                             'time_id' => $time->id,
-                            'school_year_id' => 1,
-                            // 'day' => $day->name,
-                            // 'time' => $time->start_time . ' - ' . $time->end_time,
+                            'day_id' => $day->id,
+                            'room' => $room->grade . $room->code,
+                            'day' => $day->name,
+                            'time' => $time->start_time . ' - ' . $time->end_time,
                         ];
 
                         $schedules->push($schedule);
+
+                        if ($time_next) {
+                            $schedule = [
+                                'teacher_subject_id' => $teachersubject->id,
+                                'teacher_id' => $teachersubject->teacher->name,
+                                'subject_id' => $teachersubject->subject->name,
+                                'time_id' => $time_next->id,
+                                'day_id' => $day->id,
+                                'room' => $room->grade . $room->code,
+                                'day' => $day->name,
+                                'time' => $time_next->start_time . ' - ' . $time_next->end_time,
+                            ];
+                            $schedules->push($schedule);
+                        }
                     }
-                    // return $schedules->toArray();
-                    $to_fill = [];
-                    foreach ($schedules as $schedule) {
-                        $to_fill[] = (array)$schedule;
+
+                    $sorted = $schedules->sortBy(['room', 'asc'], ['day_id', 'asc'], ['time_id', 'asc']);
+
+                    for ($i = 1; $i <= 6; $i++) {
+                        echo "<table style='width: 100%' border=1>";
+                        foreach ($sorted->where('day_id', $i) as $key => $value) {
+                            echo
+                            "<tr>
+                                <td width=100>{$value['day']}</td>
+                                <td width=100>{$value['time']}</td>
+                                <td width=100>{$value['room']}</td>
+                                <td width=300>{$value['teacher_id']}</td>
+                                <td>{$value['subject_id']}</td>
+                            </tr>";
+                        }
+                        echo "</table>";
                     }
-                    DB::table('schedules')->where('school_year_id', 1)->delete();
-                    DB::table('schedules')->insert($to_fill);
-
-
-                    return true;
-                    // $sorted = $schedules->sortBy(['day_id', 'asc'], ['time_id', 'asc']);
-
-                    // for ($i = 1; $i <= 6; $i++) {
-                    //     echo "<table style='width: 100%' border=1>";
-                    //     foreach ($sorted->where('day_id', $i) as $key => $value) {
-                    //         echo
-                    //         "<tr>
-                    //             <td width=100>{$value['day']}</td>
-                    //             <td width=100>{$value['time']}</td>
-                    //             <td width=100>{$value['room']}</td>
-                    //             <td width=300>{$value['teacher']}</td>
-                    //             <td>{$value['subject']}</td>
-                    //         </tr>";
-                    //     }
-                    //     echo "</table>";
-                    // }
                     // echo json_encode($sorted->values()->all());
                     exit;
                     // $time = $this->times[$solution[]]
@@ -352,7 +346,6 @@ class GeneticAlgorithmClass
             if (!$found && $this->currentGeneration < $this->maxGeneration) {
                 $this->generate();
             }
-            // dd($schedules);
         } catch (\Exception $e) {
             dd($e);
         }
